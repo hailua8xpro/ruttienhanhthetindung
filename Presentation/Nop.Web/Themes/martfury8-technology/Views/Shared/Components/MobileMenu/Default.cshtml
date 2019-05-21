@@ -1,0 +1,76 @@
+﻿@model TopMenuModel
+
+<div class="magebig-mobile-menu overlay-contentpush">
+    <div class="nav-bar-wrap">
+        <nav class="nav-bar">
+            <div class="nav-logo text-hide">
+                @await Component.InvokeAsync("Logo")
+            </div>
+            <ul id="mb-collapsible" class="nav-collapse nav-mobile-accordion">
+                @{
+                    var rootCategories = Model.Categories.Where(x => x.IncludeInTopMenu).ToList();
+                }
+                @foreach (var category in rootCategories)
+                {
+                    var categoryLineModel = new TopMenuModel.CategoryLineModel
+                    {
+                        Category = category
+                    };
+                    @await Html.PartialAsync("_CategoryLine.TopMenu", categoryLineModel)
+                }
+                @if (Model.DisplayHomePageMenuItem)
+                {
+                    <li><a href="@Url.RouteUrl("HomePage")">@T("HomePage")</a></li>
+                }
+                @if (Model.NewsEnabled && Model.DisplayNewsMenuItem)
+                {
+                    <li>
+                        <a href="@Url.RouteUrl("NewsArchive")">@T("News")</a>
+                        @if (Model.NewsCategories != null && Model.NewsCategories.Any())
+                        {
+                            <i class="mbi mbi-ios-arrow-down"></i>
+                            <div class="simple-dropdown submenu show-sub">
+                                <ul>
+                                    @foreach (var newscate in Model.NewsCategories)
+                                    {
+                                        <li><a href="@Url.RouteUrl("Category", new { SeName = newscate.SeName })">@newscate.Name</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    </li>
+                }
+                @foreach (var topic in Model.Topics)
+                {
+                    <li><a href="@Url.RouteUrl("Topic", new { SeName = topic.SeName })">@topic.Name</a></li>
+                }
+                @if (Model.NewProductsEnabled && Model.DisplayNewProductsMenuItem)
+                {
+                    <li><a href="@Url.RouteUrl("NewProducts")">@T("Products.NewProducts")</a></li>
+                }
+                @if (Model.DisplayProductSearchMenuItem)
+                {
+                    <li><a href="@Url.RouteUrl("ProductSearch")">@T("Search")</a></li>
+                }
+                @if (Model.DisplayCustomerInfoMenuItem)
+                {
+                    <li><a href="@Url.RouteUrl("CustomerInfo")">@T("Account.MyAccount")</a></li>
+                }
+                @if (Model.BlogEnabled && Model.DisplayBlogMenuItem)
+                {
+                    <li><a href="@Url.RouteUrl("Blog")">@T("Blog")</a></li>
+                }
+                @if (Model.ForumEnabled && Model.DisplayForumsMenuItem)
+                {
+                    <li><a href="@Url.RouteUrl("Boards")">@T("Forum.Forums")</a></li>
+                }
+                @if (Model.DisplayContactUsMenuItem)
+                {
+                    <li><a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a></li>
+                }
+            </ul>
+        </nav>
+        <div class="close-nav"><span aria-hidden="true" class="mbi mbi-arrow-left"></span></div>
+    </div>
+</div>
+

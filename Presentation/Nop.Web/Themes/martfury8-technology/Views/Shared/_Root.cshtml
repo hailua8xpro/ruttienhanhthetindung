@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "_Root.Head";
+}
+<script asp-location="Footer">
+    AjaxCart.init(false, '.menu-item-cart .counter-number', '.wishlist .counter-number', '#flyout-cart');
+</script>
+@await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BodyStartHtmlTagAfter })
+@await Html.PartialAsync("_Notifications")
+@await Html.PartialAsync("_JavaScriptDisabledWarning")
+@await Html.PartialAsync("_OldInternetExplorerWarning")
+@await Component.InvokeAsync("AdminHeaderLinks")
+<div class="page-wrapper magebig-container position-relative">
+    @await Html.PartialAsync("_Header")
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContentBefore })
+
+    @if (IsSectionDefined("Breadcrumb"))
+    {
+        @RenderSection("Breadcrumb")
+    }
+    <div class="master-column-wrapper">
+        @RenderBody()
+    </div>
+    @await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.ContentAfter })
+</div>
+@await Component.InvokeAsync("MobileMenu")
+@await Component.InvokeAsync("RecentlyViewedProductsBlock", new { productThumbPictureSize = 100 })
+@await Component.InvokeAsync("Footer")
+@await Component.InvokeAsync("EuCookieLaw")
+@await Component.InvokeAsync("Widget", new { widgetZone = PublicWidgetZones.BodyEndHtmlTagBefore })
+<div id="go-top" style="display: none;"><a title="Top" rel="nofollow" href="#"><i class="mbi mbi-chevron-up"></i></a></div>
+<div id="modalLoadContent" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>

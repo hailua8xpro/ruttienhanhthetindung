@@ -1,0 +1,26 @@
+﻿@model TopMenuModel
+    <div class="mb-navigation vertical-menu d-none d-md-block">
+        <div class="title">
+            <i class="mbi mbi-menu"></i>
+            <span class="d-none d-md-block">
+                @T("Categories")
+                <i class="mbi mbi-ios-arrow-down"></i>
+            </span>
+        </div>
+        <div class="navigation">
+            <ul class="smartmenu magebig-nav">
+                @{
+                    var rootCategories = Model.Categories.Where(x => x.IncludeInTopMenu).ToList();
+                }
+                @foreach (var category in rootCategories)
+                {
+                    var categoryLineModel = new TopMenuModel.CategoryLineModel
+                    {
+                        Category = category
+                    };
+                    @await Html.PartialAsync("_CategoryLine.TopMenu", categoryLineModel)
+                }
+            </ul>
+        </div>
+    </div>
+   

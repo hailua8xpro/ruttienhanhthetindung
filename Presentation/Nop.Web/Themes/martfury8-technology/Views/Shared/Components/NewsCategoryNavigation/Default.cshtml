@@ -1,0 +1,25 @@
+﻿@model NewsCategoryNavigationModel
+@if (Model.NewsCategories.Count > 0)
+{
+<div class="block blog-categories">
+    <div class="block-title">
+        <strong>@T("newscategories")</strong>
+        <span class="toggle-class"></span>
+    </div>
+    <div class="block-content">
+        <ul class="nav-news-categories">
+            @foreach (var category in Model.NewsCategories)
+            {
+                var categoryLineModel = new NewsCategoryNavigationModel.NewsCategoryLineModel
+                {
+                    CurrentNewsCategoryId = Model.CurrentNewsCategoryId,
+                    NewsCategory = category
+                };
+                @await Html.PartialAsync("_NewsCategoryLine.Navigation", categoryLineModel)
+            }
+        </ul>
+    </div>
+    <div class="close-expand-mb"></div>
+    <div class="close-expanded"></div>
+</div>
+}

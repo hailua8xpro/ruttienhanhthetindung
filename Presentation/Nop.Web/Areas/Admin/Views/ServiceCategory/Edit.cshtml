@@ -1,0 +1,39 @@
+﻿@model ServiceCategoryModel
+@{
+    //page title
+    ViewBag.Title = T("Admin.Catalog.Service.Categories.EditServiceCategoryDetails").Text;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName("Service categories");
+}
+
+<form asp-controller="ServiceCategory" asp-action="Edit" method="post" id="category-form">
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.Catalog.Service.Categories.EditServiceCategoryDetails") - @Model.Name
+            <small>
+                <i class="fa fa-arrow-circle-left"></i>
+                <a asp-action="List">@T("Admin.Catalog.Services.Category.BackToList")</a>
+            </small>
+        </h1>
+        <div class="pull-right">
+            <button type="button" onclick="javascript:OpenWindow('@Url.RouteUrl("ServiceCategory", new {SeName = Model.SeName})', 800, 600, true); return false;" class="btn bg-purple">
+                <i class="fa fa-eye"></i>
+                @T("Admin.Common.Preview")
+            </button>
+            <button type="submit" name="save" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.Save")
+            </button>
+            <button type="submit" name="save-continue" class="btn bg-blue">
+                <i class="fa fa-floppy-o"></i>
+                @T("Admin.Common.SaveContinue")
+            </button>
+            <span id="category-delete" class="btn bg-red">
+                <i class="fa fa-trash-o"></i>
+                @T("Admin.Common.Delete")
+            </span>
+        </div>
+    </div>
+    @await Html.PartialAsync("_CreateOrUpdate", Model)
+</form>
+<nop-delete-confirmation asp-model-id="@Model.Id" asp-button-id="Servicecategory-delete" />

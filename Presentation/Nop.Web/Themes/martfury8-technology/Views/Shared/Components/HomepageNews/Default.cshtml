@@ -1,0 +1,38 @@
+﻿@model HomePageNewsItemsModel
+@if (Model.NewsItems.Count > 0)
+{
+    <div class="block-news py-5">
+        <div class="container pb-5">
+            <div class="block-blog-main">
+                <div class="top-title border-bottom  mb-4">
+                    <h2 class="title">
+                        <a href="@Url.RouteUrl("NewsArchive")">@T("News")</a>
+                    </h2>
+                </div>
+                <div class="blog-post-wrap">
+                    <div class="row">
+                        @foreach (var item in Model.NewsItems)
+                        {
+                            <div class="col-12 col-sm-4">
+                                <div class="post-item">
+                                    <a class="position-relative post-item-image" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">
+                                        <img class="img-fluid lazy" data-src="@item.PictureModel.ImageUrl" alt="@item.Title" title="@item.Title" />
+                                    </a>
+                                    <div class="post-categories">
+                                        <a title="@item.NewsCategoryName" href="@Url.RouteUrl("NewsCategory", new { SeName = item.NewsCategorySeName })">@item.NewsCategoryName</a>
+                                    </div>
+                                    <h3 class="title">
+                                        <a href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })" title="@item.Title">@item.Title</a>
+                                    </h3>
+                                    <div class="post-posed-date">@item.CreatedOn.ToString("D")</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}

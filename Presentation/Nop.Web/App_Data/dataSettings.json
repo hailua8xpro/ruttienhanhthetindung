@@ -1,0 +1,7 @@
+﻿{
+  "DataProvider": "sqlserver",
+  //"DataConnectionString": "Data Source=171.244.26.197;Initial Catalog=nop-custom;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=NxMEFwr4tq98924020Pho@mThuc+T8s9e8#!$##$%KCNGIEKD?>C>S",
+  //"DataConnectionString": "Data Source=171.244.26.197;Initial Catalog=zumi;Integrated Security=False;Persist Security Info=False;User ID=sa;Password=NxMEFwr4tq98924020Pho@mThuc+T8s9e8#!$##$%KCNGIEKD?>C>S",
+  "DataConnectionString": "Server=DESKTOP-EADMO0H;Database=ruttiennhanhthetindung;Trusted_Connection=True;",
+  "RawDataSettings": {}
+}

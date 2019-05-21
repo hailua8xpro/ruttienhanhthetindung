@@ -1,0 +1,48 @@
+﻿@model ServiceCategoryNavigationModel.ServiceCategoryLineModel
+
+@functions{
+    public bool BreadCrumbContainsCurrentCategoryId(ServiceCategorySimpleModel category)
+    {
+        if (Model.CurrentServiceCategoryId == 0)
+            return false;
+
+        if (category.Id == Model.CurrentServiceCategoryId)
+            return true;
+
+        foreach (var subCategory in category.SubCategories)
+        {
+            if (BreadCrumbContainsCurrentCategoryId(subCategory))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+@{
+    var active = Model.ServiceCategory.Id == Model.CurrentServiceCategoryId || Model.ServiceCategory.SubCategories.Count(BreadCrumbContainsCurrentCategoryId) > 0;
+    var liClass = active ? "active" : "";
+}
+<li class="@liClass">
+    <a href="@Url.RouteUrl("Category", new { SeName = Model.ServiceCategory.SeName })">
+        @Model.ServiceCategory.Name
+</a>
+@{
+    if (Model.ServiceCategory.SubCategories.Count > 0)
+    {
+            <span class="collapsed mbi @(liClass=="active"?"mbi-ios-arrow-up":"mbi-ios-arrow-down")"></span>
+            <ul>
+                @foreach (var subCategory in Model.ServiceCategory.SubCategories)
+                {
+                    var categoryLineModel = new ServiceCategoryNavigationModel.ServiceCategoryLineModel
+                    {
+                        CurrentServiceCategoryId = Model.CurrentServiceCategoryId,
+                        ServiceCategory = subCategory
+                    };
+                    @await Html.PartialAsync("_ServiceCategoryLine.Navigation", categoryLineModel)
+                }
+            </ul>
+        }
+}
+</li>

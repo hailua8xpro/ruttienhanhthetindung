@@ -1,0 +1,58 @@
+﻿@{
+    Layout = "_Root";
+}
+@{
+    //current category ID
+    var currentCategoryId = 0;
+    if (Url.ActionContext.RouteData.Values["controller"].ToString().Equals("news", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.ActionContext.RouteData.Values["action"].ToString().Equals("category", StringComparison.InvariantCultureIgnoreCase))
+    {
+        currentCategoryId = Convert.ToInt32(Url.ActionContext.RouteData.Values["categoryId"].ToString());
+    }
+
+    //current product ID
+    var currentNewsId = 0;
+    if (Url.ActionContext.RouteData.Values["controller"].ToString().Equals("news", StringComparison.InvariantCultureIgnoreCase) &&
+        Url.ActionContext.RouteData.Values["action"].ToString().Equals("newsitem", StringComparison.InvariantCultureIgnoreCase))
+    {
+        currentNewsId = Convert.ToInt32(Url.ActionContext.RouteData.Values["newsItemId"].ToString());
+    }
+}
+@if (IsSectionDefined("Breadcrumb"))
+{
+    @section Breadcrumb {
+        @RenderSection("Breadcrumb")
+    }
+}
+<div class="container">
+    @if (IsSectionDefined("categorytitle"))
+    {
+        @RenderSection("categorytitle")
+    }
+    <div class="columns row">
+        <div class="main-wrap col-12 col-lg-8 col-xl-9 order-2 order-md-2">
+            @RenderBody()
+        </div>
+        <div class="sidebar-wrap col-12 col-lg-4 col-xl-3 order-1 order-md-3">
+            <div class="sidebar sidebar-main">
+                <div class="widget block blog-search">
+                <div class="block-title"><strong>@T("news.searchnews")</strong><span class="toggle-class"></span></div>
+                    <div class="block-content">
+                    <form class="form"  action="" method="get">
+                    <div class="field search">
+                        <label class="label" for="blog_search"><span>@T("Search")</span></label> <div class="control"><input id="blog_search" type="text" name="q" value="" placeholder="@T("news.seachkeyword")" class="input-text" maxlength="128" role="combobox" aria-haspopup="false" aria-autocomplete="both" autocomplete="off"></div>
+                                                                                                 <button type="submit" title="Search" class="action search"><span>@T("Search")</span></button>
+                    </div>
+                        
+                    </form>
+                    </div>
+                <div class="close-expand-mb"></div>
+                <div class="close-expanded"></div>
+                </div>
+                @await Component.InvokeAsync("NewsCategoryNavigation", new { currentCategoryId = currentCategoryId, currentNewsId = currentNewsId })
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,62 @@
+﻿@model LanguageSelectorModel
+@using Microsoft.AspNetCore.Http
+@using System.Net
+@using Nop.Core
+@inject IWebHelper webHelper
+@inject IHttpContextAccessor httpContextAccessor
+@if (Model.AvailableLanguages.Count > 1)
+{
+    var selectedid = 0;
+    <div class="language-topbar">
+    @{
+        var rawUrl = webHelper.GetRawUrl(httpContextAccessor.HttpContext.Request);
+
+        if (Model.UseImages)
+        {
+            var selected = Model.AvailableLanguages.FirstOrDefault(cur => cur.Id == Model.CurrentLanguageId);
+            if (selected!=null)
+            {
+                selectedid = selected.Id;
+                <div class="lang-curr">
+                    <span class="title">
+                        <span class="lang-flag">
+                            <img title='@selected.Name' alt='@selected.Name'
+                                 src="@Url.Content("~/images/flags/" +selected.FlagImageFileName)" width="18" height="12" />
+                        </span>
+                        <span class="lang-name">@selected.Name</span>
+                        <i class="mbi mbi-ios-arrow-down"></i>
+                    </span>
+                </div>
+            }
+                <div class="lang-list">
+                    <ul>
+                        @foreach (var lang in Model.AvailableLanguages.Where(lang=>lang.Id!= selectedid))
+                        {
+                            <li>
+                                <a href="@webHelper.ModifyQueryString(Url.RouteUrl("ChangeLanguage", new {langid = lang.Id}, webHelper.CurrentRequestProtocol), "returnurl", rawUrl)" title="@lang.Name">
+                                    <span class="lang-flag">
+                                        <img title='@lang.Name' alt='@lang.Name'
+                                             src="@Url.Content("~/images/flags/" +lang.FlagImageFileName)" width="18" height="12" />
+                                    </span>
+                                    <span class="lang-name">@lang.Name</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+           
+        }
+        else
+        {
+            var languages = Model.AvailableLanguages.Select(lang => new SelectListItem
+            {
+                Text = lang.Name,
+                Value = webHelper.ModifyQueryString(Url.RouteUrl("ChangeLanguage", new { langid = lang.Id }, webHelper.CurrentRequestProtocol), "returnurl", rawUrl),
+                Selected = lang.Id.Equals(Model.CurrentLanguageId)
+            });
+
+            <select id="customerlanguage" name="customerlanguage" asp-items="@languages" onchange="setLocation(this.value);"></select>
+        }
+    }
+    </div>
+}

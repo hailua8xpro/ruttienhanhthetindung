@@ -1,0 +1,109 @@
+﻿@model ProductOverviewModel
+@using Nop.Core
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Orders
+@using Nop.Core.Domain.Tax
+@inject CatalogSettings catalogSettings
+@inject IWorkContext workContext
+@{
+    //prepare "Add to cart" AJAX link
+    var addtocartlink = "";
+    var shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
+    var quantity = 1;
+    if (Model.ProductPrice.ForceRedirectionAfterAddingToCart)
+    {
+        addtocartlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity, forceredirection = Model.ProductPrice.ForceRedirectionAfterAddingToCart });
+    }
+    else
+    {
+        addtocartlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity });
+    }
+
+    var addtowishlistlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.Wishlist, quantity = quantity });
+    var addtocomparelink = Url.RouteUrl("AddProductToCompare", new { productId = Model.Id });
+}
+    <div class="product-item-info" data-productid="@Model.Id">
+        <div class="row">
+            <div class="col-12 col-sm-3">
+                <div class="product-show">
+                    <a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })">
+                        <img class="product-image-photo" alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" />
+                    </a>
+
+                </div>
+
+            </div>
+            <div class="col-12 col-sm-9">
+                <div class="row">
+                    <div class="col-12 col-sm-8">
+                        <h3 class="product-item-name">
+                            <a class="block-with-text two-row" href="@Url.RouteUrl("Product", new {SeName = Model.SeName})">@Model.Name</a>
+                        </h3>
+                        @if (Model.ReviewOverviewModel.AllowCustomerReviews)
+                        {
+                            var ratingPercent = 0;
+                            if (Model.ReviewOverviewModel.TotalReviews != 0)
+                            {
+                                ratingPercent = ((Model.ReviewOverviewModel.RatingSum * 100) / Model.ReviewOverviewModel.TotalReviews) / 5;
+                            }
+
+
+                            <div class="product-rating-box" title="@string.Format(T("Reviews.TotalReviews").Text, Model.ReviewOverviewModel.TotalReviews)">
+                                <div class="rating">
+                                    <div style="width: @(ratingPercent)%">
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                            <div class="product description product-item-description">
+                                @Html.Raw(Model.ShortDescription)
+                            </div>
+                    </div>
+                    <div class="col-12 col-sm-4">
+                        <div class="prices">
+                            @if (!string.IsNullOrEmpty(Model.ProductPrice.OldPrice))
+                            {
+                                <span class="special-price">
+                                    @Model.ProductPrice.Price
+                                </span>
+                                <span class="old-price">@Model.ProductPrice.OldPrice</span>
+                            }
+                            else
+                            {
+                                <span class="normal-price">
+                                    @Model.ProductPrice.Price
+                                </span>
+                            }
+                        </div>
+                        @if (!Model.ProductPrice.DisableBuyButton)
+                        {
+                            var addToCartText = T("ShoppingCart.AddToCart").Text;
+                            if (Model.ProductPrice.IsRental)
+                            {
+                                addToCartText = T("ShoppingCart.Rent").Text;
+                            }
+                            if (Model.ProductPrice.AvailableForPreOrder)
+                            {
+                                addToCartText = T("ShoppingCart.PreOrder").Text;
+                            }
+                            <button type="submit" title="Add to Cart" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink');return false;" class="button mainbgcolor">Add to Cart</button>
+                        }
+                        <div class="row no-gutters row-action">
+                            @if (!Model.ProductPrice.DisableWishlistButton)
+                            {
+                                <div class="col"><a title="@T("ShoppingCart.AddToWishlist")" href="javascript:" onclick="AjaxCart.addproducttocart_catalog('@addtowishlistlink');return false;"><i class="mbi mbi-heart"></i> @T("shortwishlist")</a></div>
+
+                            }
+                            @if (!Model.ProductPrice.DisableAddToCompareListButton)
+                            {
+                                <div class="col"><a title="@T("ShoppingCart.AddToCompareList")" href="javascript:" onclick="AjaxCart.addproducttocomparelist('@addtocomparelink');return false;"><i class="mbi mbi-chart-bars"></i> @T("comparelist")</a></div>
+                            }
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

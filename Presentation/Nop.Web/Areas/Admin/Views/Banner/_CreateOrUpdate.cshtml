@@ -1,0 +1,188 @@
+﻿@using Nop.Core.Domain.Banners
+@model BannerModel
+@using Nop.Services
+<div asp-validation-summary="All"></div>
+<input asp-for="Id" type="hidden" />
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    @(Html.LocalizedEditor<BannerModel, BannerLocalizedModel>("banner-info-localized",
+                    @<div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-label asp-for="@Model.Locales[item].Title" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="@Model.Locales[item].Title" />
+                                <span asp-validation-for="@Model.Locales[item].Title"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-3">
+                                <nop-label asp-for="@Model.Locales[item].Caption" />
+                            </div>
+                            <div class="col-md-9">
+                                <nop-editor asp-for="@Model.Locales[item].Caption" asp-template="RichEditor" />
+                                <span asp-validation-for="@Model.Locales[item].Caption"></span>
+                            </div>
+                        </div>
+                        <input type="hidden" asp-for="@Model.Locales[item].LanguageId" />
+                    </div>
+                                                                                                                                                    ,
+                                                                                                                                                    @<div>
+                                                                                                                                                        <div class="form-group">
+                                                                                                                                                            <div class="col-md-3">
+                                                                                                                                                                <nop-label asp-for="Title" />
+                                                                                                                                                            </div>
+                                                                                                                                                            <div class="col-md-9">
+                                                                                                                                                                <nop-editor asp-for="Title" asp-required="true" />
+                                                                                                                                                                <span asp-validation-for="Title"></span>
+                                                                                                                                                            </div>
+                                                                                                                                                        </div>
+                                                                                                                                                        <div class="form-group">
+                                                                                                                                                            <div class="col-md-3">
+                                                                                                                                                                <nop-label asp-for="Caption" />
+                                                                                                                                                            </div>
+                                                                                                                                                            <div class="col-md-9">
+                                                                                                                                                                <nop-editor asp-for="Caption" asp-required="false" asp-template="RichEditor" />
+                                                                                                                                                                <span asp-validation-for="Caption"></span>
+                                                                                                                                                            </div>
+                                                                                                                                                        </div>
+                                                                                                                                                    </div>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ))
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="PictureId" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="PictureId" />
+                            <span asp-validation-for="PictureId"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="Type" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-select asp-for="Type" asp-items="@((BannerType)Model.Type).ToSelectList()" />
+                            <span asp-validation-for="Type"></span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="CategoryId" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-select asp-for="CategoryId" asp-items="Model.AvailableCategoryEntity" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="Url" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="Url" asp-required="true" />
+                            <span asp-validation-for="Url"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="ShowCaption" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="ShowCaption" />
+                            <span asp-validation-for="ShowCaption"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="Published" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="Published" />
+                            <span asp-validation-for="Published"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="DisplayOrder" />
+                        </div>
+                        <div class="col-md-9">
+                            <nop-editor asp-for="DisplayOrder" />
+                            <span asp-validation-for="DisplayOrder"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <nop-label asp-for="SelectedStoreIds" />
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <nop-select asp-for="SelectedStoreIds" asp-items="Model.AvailableStores" asp-multiple="true" />
+                                    <script>
+                                            $(document).ready(function() {
+                                            var storesIdsInput = $('#@Html.IdFor(model => model.SelectedStoreIds)')
+                                            .data("kendoMultiSelect");
+                                            storesIdsInput.setOptions({
+                                                autoClose: false,
+                                                filter: "contains"
+                                            });
+                                            @if (Model.AvailableStores.Count == 0)
+                                            {
+                                                <text>
+                                                storesIdsInput.setOptions({
+                                                enable: false,
+                                                placeholder: 'No stores available'
+                                                });
+                                                storesIdsInput._placeholder();
+                                                storesIdsInput._enable();
+                                                </text>
+                                            }
+                                            });
+                                    </script>
+                                </div>
+                                <div class="col-md-8">
+                                    @await Component.InvokeAsync("MultistoreDisabledWarning")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $("#@Html.IdFor(model => model.Type)").change(function() {
+        var selectedItem = $(this).val();
+            var ddlCategory = $("#@Html.IdFor(model => model.CategoryId)");
+            if (selectedItem != @((int)BannerType.ProductCategory)) {
+                                    ddlCategory.html('');
+                                    ddlCategory.append($('<option></option>').val(0).html('@T("Admin.Common.All")'));
+                                    return false;
+            }
+        $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.Action("GetCategoriesByBannerType", "Banner"))",
+                data: { "type": selectedItem},
+                success: function(data) {
+                ddlCategory.html('');
+                $.each(data, function(id, option) {
+                    ddlCategory.append($('<option></option>').val(option.Value).html(option.Text));
+                });
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                alert('Failed to retrieve states.');
+                }
+            });
+        });
+
+    });
+</script>

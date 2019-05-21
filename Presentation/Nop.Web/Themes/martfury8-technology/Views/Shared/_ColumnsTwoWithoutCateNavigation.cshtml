@@ -1,0 +1,27 @@
+﻿@{
+    Layout = "_Root";
+}
+@if (IsSectionDefined("Breadcrumb"))
+{
+    @section Breadcrumb {
+        @RenderSection("Breadcrumb")
+    }
+}
+<div class="container">
+    @if (IsSectionDefined("categorytitle"))
+    {
+        @RenderSection("categorytitle")
+    }
+    <div class="columns row">
+        <div class="main-wrap col-12 col-lg-8 col-xl-9 order-2 order-md-3 pt-3">
+            @RenderBody()
+        </div>
+        <div class="sidebar-wrap col-12 col-lg-4 col-xl-3 order-1 order-md-2">
+            <div class="sidebar sidebar-main">
+                @RenderSection("left", false)
+            </div>
+        </div>
+    </div>
+
+
+</div>

@@ -1,0 +1,25 @@
+﻿@model ServiceCategoryNavigationModel
+@if (Model.ServiceCategories.Count > 0)
+{
+<div class="block blog-categories">
+    <div class="block-title">
+        <strong>@T("servicecategory")</strong>
+        <span class="toggle-class"></span>
+    </div>
+    <div class="block-content">
+        <ul class="nav-news-categories">
+            @foreach (var servicecategory in Model.ServiceCategories)
+            {
+                var categoryLineModel = new ServiceCategoryNavigationModel.ServiceCategoryLineModel
+                {
+                    CurrentServiceCategoryId = Model.CurrentServiceCategoryId,
+                    ServiceCategory = servicecategory
+                };
+                @await Html.PartialAsync("_ServiceCategoryLine.Navigation", categoryLineModel)
+            }
+        </ul>
+    </div>
+    <div class="close-expand-mb"></div>
+    <div class="close-expanded"></div>
+</div>
+}

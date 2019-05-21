@@ -1,0 +1,64 @@
+﻿@model ServiceItemModel
+@using Nop.Core.Domain.Common
+@inject IThemeContext themeContext
+@inject CommonSettings commonSettings
+
+@{
+    Layout = "_ColumnsTwoService";
+    var themeName = themeContext.WorkingThemeName;
+
+    //title
+    Html.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    //meta
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+    //page class
+    Html.AppendPageCssClassParts("html-service-item-page");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/news.css");
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+
+}
+@section categorytitle{
+    <div class="page-title-wrapper"><h1 class="page-title" id="page-title-heading" aria-labelledby="page-title-heading toolbar-amount"><span class="base" data-ui-id="page-title-wrapper">@Model.Name</span></h1> </div>
+}
+@section Breadcrumb
+    {
+    <div class="wrapper-breadcrums">
+        <div class="container">
+            <div class="breadcrumb">
+                <ul itemscope itemtype="http://schema.org/BreadcrumbList">
+                    <li>
+                        <a href="@Url.RouteUrl("HomePage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
+                        <span class="delimiter">@breadcrumbDelimiter</span>
+                    </li>
+                    @{ int position = 1; }
+                    @foreach (var cat in Model.CategoryBreadcrumb)
+                    {
+                        var isLastCategory = cat.Id == Model.Id;
+                        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                <a href="@Url.RouteUrl("ServiceCategory", new { SeName = cat.SeName })" title="@cat.Name" itemprop="item">
+                                    <span itemprop="name">@cat.Name</span>
+                                </a>
+                                <span class="delimiter">@breadcrumbDelimiter</span>
+                            <meta itemprop="position" content="@position" />
+                        </li>
+                        position++;
+                    }
+                    <li>
+                        <span>@Model.Name</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+<div class="page news-item-page">
+    <div class="page-body">
+        <div class="news-date">
+            @Model.CreatedOn.ToString("D")
+        </div>
+        <div class="news-body">
+            @Html.Raw(Model.Full)
+        </div>
+    </div>
+</div>

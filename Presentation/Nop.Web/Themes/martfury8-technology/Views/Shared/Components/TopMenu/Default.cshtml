@@ -1,0 +1,96 @@
+﻿@model TopMenuModel
+<ul class="smartmenu magebig-nav">
+    @if (Model.DisplayHomePageMenuItem)
+    {
+        <li><a href="@Url.RouteUrl("HomePage")">@T("HomePage")</a></li>
+    }
+    @{
+        var rootCategories = Model.Categories!=null?Model.Categories?? Model.Categories.Where(x => x.IncludeInTopMenu):null;
+        var rootNewsCategories = Model.NewsCategories!=null? Model.NewsCategories.Where(x => x.IncludeInTopMenu):null;
+        var rootServiceCategories = Model.ServiceCategories!=null? Model.ServiceCategories.Where(x => x.IncludeInTopMenu):null;
+        var services = Model.Services!=null? Model.Services.Where(x => x.IncludeInTopMenu):null;
+    }
+
+    @foreach (var topic in Model.Topics)
+    {
+        <li><a href="@Url.RouteUrl("Topic", new { SeName = topic.SeName })">@topic.Name</a></li>
+    }
+    @if (Model.NewProductsEnabled && Model.DisplayNewProductsMenuItem)
+    {
+        <li><a href="@Url.RouteUrl("NewProducts")">@T("Products.NewProducts")</a></li>
+    }
+    @if (Model.DisplayProductSearchMenuItem)
+    {
+        <li><a href="@Url.RouteUrl("ProductSearch")">@T("Search")</a></li>
+    }
+    @if (Model.DisplayCustomerInfoMenuItem)
+    {
+        <li><a href="@Url.RouteUrl("CustomerInfo")">@T("Account.MyAccount")</a></li>
+    }
+    @if (Model.BlogEnabled && Model.DisplayBlogMenuItem)
+    {
+        <li><a href="@Url.RouteUrl("Blog")">@T("Blog")</a></li>
+    }
+    @if (Model.ForumEnabled && Model.DisplayForumsMenuItem)
+    {
+        <li><a href="@Url.RouteUrl("Boards")">@T("Forum.Forums")</a></li>
+    }
+    @if (Model.NewsEnabled && Model.DisplayNewsMenuItem)
+    {
+        <li>
+            <a href="@Url.RouteUrl("NewsArchive")">@T("News")</a>
+            @if (Model.NewsCategories != null && Model.NewsCategories.Any())
+            {
+                <i class="mbi mbi-ios-arrow-down"></i>
+                <div class="simple-dropdown submenu show-sub">
+                    <ul>
+                        @foreach (var newscate in Model.NewsCategories)
+                        {
+                            <li><a href="@Url.RouteUrl("Category", new { SeName = newscate.SeName })">@newscate.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            }
+        </li>
+    }
+    @if (Model.ServiceEnabled && Model.DisplayServiceMenuItem && Model.DisplayServiceCategoryMenuItem)
+    {
+        <li>
+            <a href="@Url.RouteUrl("Service")">@T("Service")</a>
+            @if (rootServiceCategories != null && rootServiceCategories.Any())
+            {
+                <i class="mbi mbi-ios-arrow-down"></i>
+                <div class="simple-dropdown submenu show-sub">
+                    <ul>
+                        @foreach (var servicecate in rootNewsCategories)
+                        {
+                            <li><a href="@Url.RouteUrl("ServiceCategory", new { SeName = servicecate.SeName })">@servicecate.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            }
+        </li>
+    }
+    else if (Model.ServiceEnabled && Model.DisplayServiceMenuItem && !Model.DisplayServiceCategoryMenuItem)
+    {
+        <li>
+            <a href="@Url.RouteUrl("Service")">@T("Service")</a>
+            @if (services != null && services.Any())
+            {
+                <i class="mbi mbi-ios-arrow-down"></i>
+                <div class="simple-dropdown submenu show-sub">
+                    <ul>
+                        @foreach (var service in services)
+                        {
+                            <li><a href="@Url.RouteUrl("ServiceItem", new { SeName = service.SeName })">@service.Name</a></li>
+                        }
+                    </ul>
+                </div>
+            }
+        </li>
+    }
+    @if (Model.DisplayContactUsMenuItem)
+    {
+        <li><a href="@Url.RouteUrl("ContactUs")">@T("ContactUs")</a></li>
+    }
+</ul>

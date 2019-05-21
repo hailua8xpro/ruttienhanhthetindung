@@ -1,0 +1,27 @@
+﻿@using Nop.Core
+@using Nop.Services.Helpers
+@using Nop.Web.Framework.UI
+@inject IWorkContext workContext
+@inject IThemeContext themeContext
+@inject IUserAgentHelper userAgentHelper
+@{
+    var supportRtl = workContext.WorkingLanguage.Rtl;
+    var themeName = themeContext.WorkingThemeName;
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/style.css");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/global.css");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/fontMbi/css/fontMbi.css");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/quickview.css");
+    Html.AppendCssFileParts("~/lib/jquery-ui/jquery-ui-1.12.1.custom/jquery-ui.min.css");
+    Html.AppendCssFileParts("~/lib/bootstrap-4.3.1/css/bootstrap.css");
+    Html.AppendCssFileParts("~/lib/swiper/css/swiper.css");
+    Html.AppendCssFileParts("~/lib/magnific-popup/magnific-popup.css");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/bootstrap-4.3.1/js/bootstrap.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/popper.js/umd/popper.min.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/js/global.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/bootstrap-notify/bootstrap-notify.min.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/swiper/js/swiper.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquey-lazyload/jquery.lazy.min.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/magnific-popup/jquery.magnific-popup.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/js/public.ajaxcart.js");
+    Html.AppendScriptParts(ResourceLocation.Footer, $"~/Themes/{themeName}/js/public.common.js");
+}

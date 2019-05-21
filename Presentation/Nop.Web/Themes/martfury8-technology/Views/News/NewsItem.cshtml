@@ -1,0 +1,164 @@
+﻿@model NewsItemModel
+@using Nop.Core.Domain.Common
+@inject IThemeContext themeContext
+@inject CommonSettings commonSettings
+
+@{
+    Layout = "_ColumnsTwoNews";
+    var themeName = themeContext.WorkingThemeName;
+
+    //title
+    Html.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Title);
+    //meta
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+    //page class
+    Html.AppendPageCssClassParts("html-news-item-page");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/news.css");
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+
+}
+@section categorytitle{
+    <div class="page-title-wrapper"><h1 class="page-title" id="page-title-heading" aria-labelledby="page-title-heading toolbar-amount"><span class="base" data-ui-id="page-title-wrapper">@Model.Title</span></h1> </div>
+}
+@section Breadcrumb
+    {
+    <div class="wrapper-breadcrums">
+        <div class="container">
+            <div class="breadcrumb">
+                <ul itemscope itemtype="http://schema.org/BreadcrumbList">
+                    <li>
+                        <a href="@Url.RouteUrl("HomePage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
+                        <span class="delimiter">@breadcrumbDelimiter</span>
+                    </li>
+                    @{ int position = 1; }
+                    @foreach (var cat in Model.CategoryBreadcrumb)
+                    {
+                        var isLastCategory = cat.Id == Model.Id;
+                        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                <a href="@Url.RouteUrl("NewsCategory", new { SeName = cat.SeName })" title="@cat.Name" itemprop="item">
+                                    <span itemprop="name">@cat.Name</span>
+                                </a>
+                                <span class="delimiter">@breadcrumbDelimiter</span>
+                            <meta itemprop="position" content="@position" />
+                        </li>
+                        position++;
+                    }
+                    <li>
+                        <span>@Model.Title</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+<div class="page news-item-page">
+    <div class="page-body">
+        <div class="news-date">
+            @Model.CreatedOn.ToString("D")
+        </div>
+        <div class="news-body">
+            @Html.Raw(Model.Full)
+        </div>
+        @if (Model.AllowComments)
+        {
+            <div class="fieldset new-comment" id="comments">
+                <div class="title">
+                    <strong>@T("News.Comments.LeaveYourComment")</strong>
+                </div>
+                <div class="notifications">
+                    <div asp-validation-summary="ModelOnly" class="message-error"></div>
+                    @{
+                        var result = TempData["nop.news.addcomment.result"] as string;
+                    }
+                    @if (!string.IsNullOrEmpty(result))
+                    {
+                        <div class="result">@result</div>
+                    }
+                </div>
+                <form asp-route="NewsItem" asp-route-sename="@Model.SeName" method="post">
+                    <div class="form-fields">
+                        <div class="inputs row">
+                            <div class="col-md-2"><label asp-for="AddNewComment.CommentTitle" asp-postfix=":"></label></div>
+                            <div class="col-md-10">
+                                <input asp-for="AddNewComment.CommentTitle" class="enter-comment-title form-control" />
+                                <span asp-validation-for="AddNewComment.CommentTitle"></span>
+                            </div>
+                        </div>
+                        <div class="inputs row mt-3">
+                            <div class="col-md-2"><label asp-for="AddNewComment.CommentText" asp-postfix=":"></label></div>
+                            <div class="col-md-10">
+                                <textarea asp-for="AddNewComment.CommentText" class="enter-comment-text form-control"></textarea>
+                                <span asp-validation-for="AddNewComment.CommentText"></span>
+                            </div>
+                        </div>
+                        @if (Model.AddNewComment.DisplayCaptcha)
+                        {
+                            <div class="captcha-box">
+                                <nop-captcha />
+                            </div>
+                        }
+                    </div>
+                    <div class="buttons text-center">
+                        <input type="submit" name="add-comment" class="btn btn-primary" value="@T("News.Comments.SubmitButton")" />
+                    </div>
+                </form>
+            </div>
+            if (Model.Comments.Count > 0)
+            {
+                <div class="comment-list">
+                    <div class="title">
+                        <strong>@T("News.Comments")</strong>
+                    </div>
+                    <div class="comments">
+                        @foreach (var comment in Model.Comments)
+                        {
+                            <div class="comment news-comment">
+                                <div class="comment-info">
+                                    <div class="user-info">
+                                        @if (comment.AllowViewingProfiles)
+                                        {
+                                            <a href="@Url.RouteUrl("CustomerProfile", new { id = comment.CustomerId })" class="username">@(comment.CustomerName)</a>
+                                        }
+                                        else
+                                        {
+                                            <span class="username">@(comment.CustomerName)</span>
+                                        }
+
+                                        @if (!string.IsNullOrEmpty(comment.CustomerAvatarUrl))
+                                        {
+                                            <div class="avatar">
+                                                @if (comment.AllowViewingProfiles)
+                                                {
+                                                    <a href="@Url.RouteUrl("CustomerProfile", new { id = comment.CustomerId })" class="avatar-img-link">
+                                                        <img src="@(comment.CustomerAvatarUrl)" class="avatar-img" alt="avatar" />
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <img src="@(comment.CustomerAvatarUrl)" class="avatar-img" alt="avatar" />
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="comment-content">
+                                    <div class="comment-time">
+                                        <label>@T("News.Comments.CreatedOn"):</label>
+                                        <span class="stat-value">@comment.CreatedOn.ToString("g")</span>
+                                    </div>
+                                    <div class="comment-title">
+                                        <strong class="comment-text">@comment.CommentTitle</strong>
+                                    </div>
+                                    <div class="comment-body">
+                                        <p class="comment-text">@Html.Raw(Nop.Core.Html.HtmlHelper.FormatText(comment.CommentText, false, true, false, false, false, false))</p>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,30 @@
+﻿@model ManufacturerNavigationModel
+@if (Model.Manufacturers.Count > 0)
+{
+<div class="block filter">
+    <div class="block-title filter-title"><strong>@T("Manufacturers")</strong><span class="toggle-class"></span></div>
+    <div class="block-content filter-content">
+        <div class="filter-options">
+            <div class="filter-options-content">
+                <ol class="nav-collapse nav-categories">
+                    @foreach (var manufacturer in Model.Manufacturers)
+                    {
+                        <li class="item @(manufacturer.IsActive ? "active" : "inactive")">
+                            <a href="@Url.RouteUrl("Manufacturer", new { SeName = manufacturer.SeName })">@manufacturer.Name</a>
+                        </li>
+                    }
+                </ol>
+                @if (Model.TotalManufacturers > Model.Manufacturers.Count)
+                {
+                    <div class="view-all">
+                        <a href="@Url.RouteUrl("ManufacturerList")">@T("Manufacturers.ViewAll")</a>
+                    </div>
+                }
+            </div>
+        </div>
+
+    </div>
+    <div class="close-expand-mb"></div>
+    <div class="close-expanded"></div>
+</div>
+}

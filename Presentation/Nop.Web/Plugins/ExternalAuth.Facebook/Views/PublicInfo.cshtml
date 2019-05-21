@@ -1,0 +1,13 @@
+﻿@{
+    Layout = "";
+    
+}
+<div class="facebook-login-block text-center social-login">
+    <div class="buttons">
+        <a asp-controller="facebookauthentication" asp-action="login" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" class="facebook-btn button w-100">
+            <span class="wr-socialicon"> <i class="mbi mbi-facebook"></i>
+            </span>
+            <span>Đăng nhập bằng Facebook</span>
+</a>
+    </div>
+</div>

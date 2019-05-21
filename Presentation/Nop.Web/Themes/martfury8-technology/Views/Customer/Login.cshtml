@@ -1,0 +1,130 @@
+﻿@model LoginModel
+@using System.Net
+@using Nop.Core
+@using Nop.Core.Domain.Common
+@inject IThemeContext themeContext
+@inject IWebHelper webHelper
+@inject CommonSettings commonSettings
+@{
+    Layout = "_ColumnsOne";
+    var themeName = themeContext.WorkingThemeName;
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Login").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-login-page");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/account.css");
+
+    //register URL with return URL (if specified)
+    var registerUrl = Url.RouteUrl("Register", null, webHelper.CurrentRequestProtocol);
+    if (!string.IsNullOrEmpty(this.Context.Request.Query["returnUrl"]))
+    {
+        registerUrl = webHelper.ModifyQueryString(registerUrl, "returnurl", this.Context.Request.Query["returnUrl"]);
+    }
+}
+<div class="wrapper-breadcrums">
+    <div class="container">
+        <div class="breadcrumb">
+            <ul itemscope="" itemtype="http://schema.org/BreadcrumbList">
+                <li class="item">
+                    <span>
+                        <a href="@Url.RouteUrl("HomePage")">
+                            <span>@T("Products.Breadcrumb.Top")</span>
+                        </a>
+                    </span>
+                    <span class="delimiter">@breadcrumbDelimiter</span>
+                </li>
+                <li>
+                    <strong class="current-item">@T("PageTitle.Login")</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="page login-page">
+    <div class="container">
+        @await Html.PartialAsync("_ExternalAuthentication.Errors")
+        <div class="page-body">
+            <div class="customer-blocks row">
+                <div class="col-sm-6 offset-md-3 col-login">
+                    
+                    <div class="tabs-content">
+                        <div class="row my-4">
+                            <div class="col text-right">
+                                <span class="h3 text-secondary">@T("Account.Login")</span>
+                            </div>
+                            <div class="col">
+                                <a href="@registerUrl" class="h3 text-body">@T("Account.Register")</a>
+
+                            </div>
+                        </div>
+                        <div class="tabs-panel">
+                            <form asp-route="Login" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post">
+                                <div asp-validation-summary="ModelOnly" class="message-error">@T("Account.Login.Unsuccessful")</div>
+
+                                @if (Model.UsernamesEnabled)
+                                {
+                                    <input asp-for="Username" class="form-control" autofocus="autofocus" />
+                                    <span asp-validation-for="Username"></span>
+                                }
+                                else
+                                {
+                                    <input asp-for="Email" class="form-control" autofocus="autofocus" />
+                                    <span asp-validation-for="Email"></span>
+                                }
+                                <input asp-for="Password" class="form-control" />
+                                <span asp-validation-for="Password"></span>
+                                <div class="inputs my-3">
+                                    <input asp-for="RememberMe" />
+                                    <label asp-for="RememberMe"></label>
+                                    <span class="forgot-password">
+                                        <a asp-route="PasswordRecovery">@T("Account.Login.ForgotPassword")</a>
+                                    </span>
+
+                                </div>
+                                @if (Model.DisplayCaptcha)
+                                {
+                                    <div class="captcha-box">
+                                        <nop-captcha />
+                                    </div>
+                                }
+                                <div class="buttons">
+                                    <input class="d-block w-100 button mainbgcolor" type="submit" value="@T("Account.Login.LoginButton")" />
+
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="form-fields">
+                            <div class="external-authentication">
+                                @await Component.InvokeAsync("ExternalMethods", "ExternalAuthentication")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.CheckoutAsGuest)
+                {
+                    <div class="new-wrapper checkout-as-guest-or-register-block col-md-6 mb-4">
+                        <div class="cl">
+                            <div class="title">
+                                <strong>@T("Account.Login.CheckoutAsGuestOrRegister")</strong>
+                            </div>
+                            <div class="text">
+                                @await Component.InvokeAsync("TopicBlock", new { systemName = "CheckoutAsGuestOrRegister" })
+                            </div>
+                            <div class="buttons">
+                                <input type="button" class="button checkout-as-guest-button" onclick="location.href='@Url.RouteUrl("Checkout")'" value="@T("Account.Login.CheckoutAsGuest")" />
+                                <input type="button" class="button register-button" onclick="location.href='@registerUrl'" value="@T("Account.Register")" />
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    
+                }
+            </div>
+        </div>
+    </div>
+</div>

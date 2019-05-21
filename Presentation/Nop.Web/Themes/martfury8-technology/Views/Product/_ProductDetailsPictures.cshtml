@@ -1,0 +1,47 @@
+﻿@model ProductDetailsModel
+@if (Model.PictureModels.Count > 1)
+{
+    <div class="swiper-container product-detail-gallery-slider">
+        <div class="swiper-wrapper">
+            @foreach (var picture in Model.PictureModels)
+            {
+                <div class="swiper-slide"><div class="swiper-zoom-container"><img src="@picture.FullSizeImageUrl" alt="@picture.AlternateText" title="@picture.Title" /></div></div>
+            }
+        </div>
+    </div>
+    <div class="swiper-container mt-4 product-detail-gallerythumb-slider">
+        <div class="swiper-wrapper">
+            @foreach (var picture in Model.PictureModels)
+            {
+                <div class="swiper-slide"><img src="@picture.FullSizeImageUrl" alt="@picture.AlternateText" title="@picture.Title" /></div>
+            }
+        </div>
+    </div>
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            var productdetailthumbimageslider = new Swiper('.product-detail-gallerythumb-slider', {
+                spaceBetween: 10,
+                slidesPerView: 4,
+                freeMode: true,
+                watchSlidesVisibility: true,
+                watchSlidesProgress: true,
+            });
+            var productdetailimageslider = new Swiper('.product-detail-gallery-slider', {
+                spaceBetween: 10,
+                zoom: true,
+                autoHeight: true,
+                thumbs: {
+                    swiper: productdetailthumbimageslider,
+                },
+            });
+        });
+    </script>
+}
+else
+{
+    <div class="product-detail-gallery-slider">
+        <img src="@Model.DefaultPictureModel.FullSizeImageUrl" class="img-fluid" />
+    </div>
+    
+}
+    

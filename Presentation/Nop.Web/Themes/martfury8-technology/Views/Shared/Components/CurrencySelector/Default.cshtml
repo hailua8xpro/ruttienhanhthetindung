@@ -1,0 +1,37 @@
+﻿@model CurrencySelectorModel
+@using Microsoft.AspNetCore.Http
+@using System.Net
+@using Nop.Core
+@inject IWebHelper webHelper
+@inject IHttpContextAccessor httpContextAccessor
+@if (Model.AvailableCurrencies.Count > 1)
+{
+    var selectedid = 0;
+<div class="currency-topbar">
+    @{
+        var selected = Model.AvailableCurrencies.FirstOrDefault(cur => cur.Id == Model.CurrentCurrencyId);
+        if (selected != null)
+        {
+            selectedid = selected.Id;
+            <div class="currency-sym">
+                <span class="title">
+                    <span>@selected.Name</span>
+                    <i class="mbi mbi-ios-arrow-down"></i>
+                </span>
+            </div>
+        }
+    }
+            <div class="currency-list">
+                <ul>
+                    @foreach (var item in Model.AvailableCurrencies.Where(cur => cur.Id != selectedid))
+                    {
+                        var href = webHelper.ModifyQueryString(Url.RouteUrl("ChangeCurrency", new { customercurrency = item.Id }, webHelper.CurrentRequestProtocol), "returnurl", webHelper.GetRawUrl(httpContextAccessor.HttpContext.Request));
+                       <li>
+                           <a href="@href">@item.Name</a>
+                       </li>
+                    }
+                </ul>
+               
+            </div>
+</div>
+}

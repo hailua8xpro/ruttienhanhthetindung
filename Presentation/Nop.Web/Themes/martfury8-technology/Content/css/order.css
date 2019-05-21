@@ -1,0 +1,159 @@
+﻿.html-checkout-page input[type=text], .html-checkout-page input[type=email], .html-checkout-page input[type=tel], .html-checkout-page input[type=password], .html-checkout-page input[type=tel], .html-checkout-page select {
+    width: calc(100% - 15px);
+}
+.html-checkout-page .mbi.mbi-trash2{
+    display:none;
+}
+.opc .step-title {
+    margin: 0 0 1px;
+    overflow: hidden;
+    background-color: #f6f6f6;
+}
+    .opc .step-title h2{
+        margin-bottom:0;
+    }
+.html-checkout-page .cart.items{
+    text-align:left;
+}
+.opc .allow .step-title {
+    background-color: var(--maincolor);
+    cursor: pointer;
+}
+
+.opc .step-title .number,
+.opc .step-title .title {
+    float: left;
+    min-height: 40px;
+    padding: 10px 15px;
+    line-height: 20px;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.opc .allow .step-title .number,
+.opc .allow .step-title .title {
+    color: #fff;
+    cursor: pointer;
+}
+
+.opc .step-title .number {
+    width: 42px;
+    border-right: 1px solid #fff;
+    text-align: center;
+}
+
+.opc .allow .step-title .number {
+    background-color: #4e8a08;
+}
+
+.opc .step {
+    margin: 10px 0;
+    padding: 30px 15px;
+}
+
+.opc .section {
+    margin: 0 0 30px;
+}
+
+    .opc .section > label {
+        display: block;
+        margin: 0 0 10px;
+    }
+
+.opc input[type="text"],
+.opc select {
+    max-width: 100%;
+}
+
+.opc .buttons {
+    margin-bottom: 0;
+}
+
+.opc .back-link {
+    margin: 0 0 10px;
+}
+
+    .opc .back-link small {
+        display: none;
+    }
+
+    .opc .back-link a {
+        display: inline-block;
+        margin: 0 0 0 -15px;
+        background: url('../images/back-button.png') left center no-repeat;
+        padding: 0 0 0 18px;
+        color: #444;
+    }
+
+        .opc .back-link a:hover {
+            color: #4ab2f1;
+        }
+
+.opc .buttons .please-wait {
+    display: block;
+    margin: 10px 0 0;
+    background: none;
+}
+
+.opc .section.ship-to-same-address {
+    margin: 0 0 30px;
+    padding: 0;
+}
+
+.opc .section.pickup-in-store {
+    margin: 0 0 30px;
+    padding: 0;
+}
+
+.opc .payment-info .info tr {
+    text-align: left;
+}
+
+.opc .section.order-summary {
+    margin: 0;
+}
+
+/*#region reponsive */
+@media (min-width: 576px) {
+    .order-details-page .data-table tr {
+        width: 46%;
+        margin: 40px 2% 0;
+    }
+    .order-details-page .data-table tr:nth-child(2n+1) {
+        clear: both;
+    }
+}
+
+@media (min-width: 768px) {
+    .order-details-page .data-table tr {
+        width: 31.33333%;
+        margin: 40px 1% 0;
+    }
+        .order-details-page .data-table tr:nth-child(2n+1) {
+            clear: none;
+        }
+        .order-details-page .data-table tr:nth-child(3n+1) {
+            clear: both;
+        }
+    .order-details-page .section.options {
+        text-align: right;
+    }
+    .order-details-page .totals {
+        float: right;
+        clear: both;
+    }
+}
+
+@media (min-width: 992px) {
+    .order-details-page .data-table tr {
+        width: auto;
+        margin: 0;
+    }
+    .order-details-page .data-table label {
+        display: none;
+    }
+}
+
+@media (min-width: 1200px) {
+}
+/*#endregion */

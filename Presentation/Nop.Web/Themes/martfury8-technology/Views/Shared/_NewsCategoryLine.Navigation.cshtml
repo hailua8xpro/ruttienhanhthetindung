@@ -1,0 +1,48 @@
+﻿@model NewsCategoryNavigationModel.NewsCategoryLineModel
+
+@functions{
+    public bool BreadCrumbContainsCurrentCategoryId(NewsCategorySimpleModel category)
+    {
+        if (Model.CurrentNewsCategoryId == 0)
+            return false;
+
+        if (category.Id == Model.CurrentNewsCategoryId)
+            return true;
+
+        foreach (var subCategory in category.SubCategories)
+        {
+            if (BreadCrumbContainsCurrentCategoryId(subCategory))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+@{
+    var active = Model.NewsCategory.Id == Model.CurrentNewsCategoryId || Model.NewsCategory.SubCategories.Count(BreadCrumbContainsCurrentCategoryId) > 0;
+    var liClass = active ? "active" : "";
+}
+<li class="@liClass">
+    <a href="@Url.RouteUrl("Category", new { SeName = Model.NewsCategory.SeName })">
+        @Model.NewsCategory.Name
+</a>
+@{
+    if (Model.NewsCategory.SubCategories.Count > 0)
+    {
+            <span class="collapsed mbi @(liClass=="active"?"mbi-ios-arrow-up":"mbi-ios-arrow-down")"></span>
+            <ul>
+                @foreach (var subCategory in Model.NewsCategory.SubCategories)
+                {
+                    var categoryLineModel = new NewsCategoryNavigationModel.NewsCategoryLineModel
+                    {
+                        CurrentNewsCategoryId = Model.CurrentNewsCategoryId,
+                        NewsCategory = subCategory
+                    };
+                    @await Html.PartialAsync("_NewsCategoryLine.Navigation", categoryLineModel)
+                }
+            </ul>
+        }
+}
+</li>

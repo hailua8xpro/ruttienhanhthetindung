@@ -1,0 +1,16 @@
+﻿
+@model IList<BannerModel>
+<div class="home-page-small-banner">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+        <div class="col-12 col-md-6">
+            <div class="home-page-small-banner-item">
+                <a class="banner hover-effect01" href="@item.Url" title="@item.Title">
+                    <img class="img-fluid lazy" data-src="@item.ImageUrl" alt="@item.Title" title="@item.Title" />
+                </a>
+            </div>
+        </div>
+        }
+    </div>
+</div>

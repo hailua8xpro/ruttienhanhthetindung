@@ -1,0 +1,36 @@
+﻿@inject IThemeContext themeContext
+@model CustomerAddressEditModel
+@{
+    Layout = "_ColumnsTwoWithoutCateNavigation";
+    var themeName = themeContext.WorkingThemeName;
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Account").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-account-page");
+    Html.AppendPageCssClassParts("html-address-edit-page");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/account.css");
+
+}
+@section left
+    {
+    @await Component.InvokeAsync("CustomerNavigation", new { selectedTabId = CustomerNavigationEnum.Addresses })
+}
+<form asp-route="CustomerAddressEdit" method="post">
+    <div class="page account-page address-edit-page">
+        <div class="page-title">
+            <h1>@T("Account.MyAccount") - @T("Account.CustomerAddresses.Edit")</h1>
+        </div>
+        <div class="page-body">
+            <div asp-validation-summary="ModelOnly" class="message-error"></div>
+            @{
+                var dataDictAddress = new ViewDataDictionary(ViewData);
+                dataDictAddress.TemplateInfo.HtmlFieldPrefix = "Address";
+                @await Html.PartialAsync("_CreateOrUpdateAddress", Model.Address, dataDictAddress)
+            }
+            <div class="buttons">
+                <input type="submit" class="btn btn-primary" value="@T("Common.Save")" />
+            </div>
+        </div>
+    </div>
+</form>

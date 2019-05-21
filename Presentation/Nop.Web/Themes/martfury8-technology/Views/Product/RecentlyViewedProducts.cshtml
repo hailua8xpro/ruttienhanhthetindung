@@ -1,0 +1,60 @@
+﻿@using Nop.Core.Domain.Common
+@model IList<ProductOverviewModel>
+@inject IThemeContext themeContext
+@inject CommonSettings commonSettings
+
+@{
+    Layout = "_ColumnsOne";
+    var themeName = themeContext.WorkingThemeName;
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+
+    //title
+    Html.AddTitleParts(T("PageTitle.RecentlyViewedProducts").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-recently-viewed-products-page");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/productitem.css");
+}
+<div class="wrapper-breadcrums">
+    <div class="container">
+        <div class="breadcrumb">
+            <ul itemscope="" itemtype="http://schema.org/BreadcrumbList">
+                <li class="item">
+                    <span>
+                        <a href="@Url.RouteUrl("HomePage")">
+                            <span>@T("Products.Breadcrumb.Top")</span>
+                        </a>
+                    </span>
+                    <span class="delimiter">@breadcrumbDelimiter</span>
+                </li>
+                <li>
+                    <strong class="current-item">@T("Products.RecentlyViewedProducts")</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="page recently-viewed-products-page">
+    <div class="container">
+        <div class="page-title row">
+            <div class="col-12">
+                <h1 class="h4 my-3">@T("Products.RecentlyViewedProducts")</h1>
+            </div>
+        </div>
+        <div class="page-body">
+            @if (Model.Count > 0)
+            {
+                <div class="product-grid">
+                    <div class="product-items row">
+                        @foreach (var product in Model)
+                        {
+                            <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6 col-6">
+                                @await Html.PartialAsync("_ProductBox", product)
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    
+</div>

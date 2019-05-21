@@ -1,0 +1,62 @@
+﻿@model HeaderLinksModel
+@using System.Text.Encodings.Web
+@if (Model.WishlistEnabled)
+{
+    <div class="col">
+        <a class="wishlist-icon link wishlist" href="@Url.RouteUrl("Wishlist")">
+            <i class="mbi mbi-heart"></i>
+            <span class="counter-number mainbgcolor">@Model.WishlistItems</span>
+        </a>
+    </div>
+}
+@if (Model.ShoppingCartEnabled)
+{
+    <div class="col menu-item-cart">
+        <a href="@Url.RouteUrl("ShoppingCart")" class="action showcart">
+            <i class="mbi mbi-bag2"></i>
+            <span class="counter-number mainbgcolor">@Model.ShoppingCartItems</span>
+        </a>
+        @await Component.InvokeAsync("FlyoutShoppingCart")
+    </div>
+}
+    <div class="menu-item-account@(Model.IsAuthenticated?" logined":string.Empty) col">
+
+        @if (Model.IsAuthenticated)
+        {
+            <a href="@Url.RouteUrl("CustomerInfo")"><i class="mbi mbi-user"></i></a>
+            <ul>
+                <li>
+                    <h3>Xin chào @Model.CustomerName</h3>
+                </li>
+                <li></li>
+                <li>
+                    <a href="@Url.RouteUrl("CustomerInfo")">@T("Account.MyAccount")</a>
+                </li>
+                <li class="line-space"></li>
+                <li>
+                    <a href="@Url.RouteUrl("Logout")">@T("Account.Logout")</a>
+                </li>
+                @if (Model.AllowPrivateMessages)
+                {
+                    <li>
+                        <a href="@Url.RouteUrl("PrivateMessages", new { tab = "" })" class="ico-inbox">
+                            <span class="inbox-label">@T("PrivateMessages.Inbox")</span>
+                            <span class="inbox-unread">@Model.UnreadPrivateMessages</span>
+                        </a>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <a href="@Url.RouteUrl("Login")"><i class="mbi mbi-user"></i></a>
+            <ul class="d-none d-md-inline-block">
+                <li>
+                    <a href="@Url.RouteUrl("Login")">@T("Account.Login")</a>
+                </li>
+                <li>
+                    <a href="@Url.RouteUrl("Register")">@T("Account.Register")</a>
+                </li>
+            </ul>
+        }
+    </div>

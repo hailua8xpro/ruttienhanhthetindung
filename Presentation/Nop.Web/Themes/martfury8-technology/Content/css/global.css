@@ -1,0 +1,41 @@
+﻿:root {
+    --maincolor: #0071df;
+}
+.maincolor {
+    color: var(--maincolor);
+}
+.mainbgcolor {
+    background-color: var(--maincolor);
+}
+a:hover{
+    text-decoration:none;
+}
+ul,ol{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+.mbi, .sidebar .close-expanded {
+    font-family: 'mbicon' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.button {
+    height: 45px;
+    line-height: 45px;
+    border-radius: 3px;
+    min-width: 150px;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    text-align:center;
+    display:inline-block;
+    color:#fff;
+    border:none;
+}
+a{transition:.5s;}

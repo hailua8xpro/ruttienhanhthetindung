@@ -1,0 +1,127 @@
+﻿@model ProductDetailsModel
+<div class="modal" id="quickviewmodal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@Model.Name</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-route="Product" asp-route-sename="@Model.SeName" method="post" id="product-details-form">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="product-info-main-top">
+                                <div class="row align-items-center">
+                                    <div class="col-12 col-lg-8">
+                                        <div class="clearfix">
+                                            <div class="float-left">
+                                                @await Html.PartialAsync("_ProductReviewOverview", Model.ProductReviewOverview)
+                                            </div>
+                                            <div class="float-left sku ml-3">
+                                                @await Html.PartialAsync("_SKU_Man_GTIN_Ven", Model)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-lg-4 text-right">
+                                        @await Html.PartialAsync("_ShareButton", Model)
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-md-6 col-lg-5">
+                                    @await Html.PartialAsync("_ProductDetailsPictures", Model)
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-7 mt-3 mt-md-0">
+                                    <div class="product-info-price" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                                        @{
+                                            var dataDictPrice = new ViewDataDictionary(ViewData);
+                                            dataDictPrice.TemplateInfo.HtmlFieldPrefix = $"price_{Model.Id}";
+                                            @await Html.PartialAsync("_ProductPrice", Model.ProductPrice, dataDictPrice)
+
+                                            @await Html.PartialAsync("_ProductTierPrices", Model.TierPrices)
+                                            <!--availability-->
+                                            @await Html.PartialAsync("_Availability", Model)
+                                            <div class="product attribute overview">
+                                                <div class="value" itemprop="description">
+                                                    @if (!string.IsNullOrEmpty(Model.ShortDescription))
+                                                    {
+                                                        @Html.Raw(Model.ShortDescription)
+                                                    }
+                                                </div>
+                                            </div>
+
+                                        }
+
+                                    </div>
+                                    <div class="product-add-form">
+                                        @{
+                                            var dataDictAddToCart = new ViewDataDictionary(ViewData);
+                                            dataDictAddToCart.TemplateInfo.HtmlFieldPrefix = $"addtocart_{Model.Id}";
+                                        }
+
+                                        <div class="clearfix">
+                                            @await Html.PartialAsync("_AddToCart", Model.AddToCart, dataDictAddToCart)
+                                            <div class="overview-buttons float-left ml-5">
+                                                @{
+                                                    var dataDictAddToWishlist = new ViewDataDictionary(ViewData);
+                                                    dataDictAddToWishlist.TemplateInfo.HtmlFieldPrefix = $"addtocart_{Model.Id}";
+                                                    @await Html.PartialAsync("_AddToWishlist", Model.AddToCart, dataDictAddToWishlist)
+                                                }
+                                                @await Html.PartialAsync("_CompareProductsButton", Model)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div itemscope itemtype="http://schema.org/Product" data-productid="@Model.Id">
+                                        <div class="product-essential">
+                                            <!--product pictures-->
+                                            <div class="overview">
+
+                                                <!--manufacturers-->
+                                                @await Html.PartialAsync("_ProductManufacturers", Model.ProductManufacturers)
+
+                                                <!--SKU, MAN, GTIN, vendor-->
+                                                <!--delivery-->
+                                                @await Html.PartialAsync("_DeliveryInfo", Model)
+                                                <!--sample download-->
+                                                @await Html.PartialAsync("_DownloadSample", Model)
+                                                <!--attributes-->
+                                                @{
+                                                    var dataDictAttributes = new ViewDataDictionary(ViewData);
+                                                    dataDictAttributes.TemplateInfo.HtmlFieldPrefix = $"attributes_{Model.Id}";
+                                                    @await Html.PartialAsync("_ProductAttributes", Model.ProductAttributes, dataDictAttributes)
+                                                }
+                                                <!--gift card-->
+                                                @{
+                                                    var dataDictGiftCard = new ViewDataDictionary(ViewData);
+                                                    dataDictGiftCard.TemplateInfo.HtmlFieldPrefix = $"giftcard_{Model.Id}";
+                                                    @await Html.PartialAsync("_GiftCardInfo", Model.GiftCard, dataDictGiftCard)
+                                                }
+                                                <!--rental info-->
+                                                @{
+                                                    var dataDictRental = new ViewDataDictionary(ViewData);
+                                                    dataDictRental.TemplateInfo.HtmlFieldPrefix = $"rental_{Model.Id}";
+                                                    @await Html.PartialAsync("_RentalInfo", Model, dataDictRental)
+                                                }
+
+
+                                            </div>
+
+                                        </div>
+
+
+                                    </div>
+                                    @await Html.PartialAsync("_ProductTags", Model.ProductTags)
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

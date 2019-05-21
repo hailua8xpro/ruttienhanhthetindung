@@ -1,0 +1,23 @@
+﻿@model IList<CategoryModel>
+@if (Model.Count > 0)
+{
+    <div class="home-page-category">
+            <h2 class="heading-title"><span>@T("HomePage.Categories")</span></h2>
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-6 col-md-4 col-lg-2">
+                        <div class="top-cat-item">
+                            <a href="@Url.RouteUrl("Category", new { SeName = item.SeName })"><img alt="@item.PictureModel.AlternateText" data-src="@item.PictureModel.ImageUrl" title="@item.PictureModel.Title" class="img-fluid lazy" /></a>
+                            <h3 class="title">
+                                <a href="@Url.RouteUrl("Category", new { SeName = item.SeName })" title="@item.PictureModel.Title">
+                                    @item.Name
+                                </a>
+                            </h3>
+                        </div>
+                    </div>
+                }
+            </div>
+
+    </div>
+}

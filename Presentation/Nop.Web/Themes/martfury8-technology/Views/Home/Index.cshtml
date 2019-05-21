@@ -1,0 +1,28 @@
+﻿@using Nop.Core.Domain.Banners
+@inject IThemeContext themeContext
+
+@{
+    Layout = "_ColumnsOne";
+    var themeName = themeContext.WorkingThemeName;
+
+    //page class
+    Html.AppendPageCssClassParts("html-home-page");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/productitem.css");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/home.css");
+}
+@await Component.InvokeAsync("BannerSlider", new { type = BannerType.Home, categoryId = 0 })
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="my-4">@await Component.InvokeAsync("TopicBlock", new { systemName = "SellingFeature" })</div>
+            <div class="my-4">
+                @await Component.InvokeAsync("HomeSmallBanner", new { type = BannerType.HomeSmallBanner, categoryId = 0 })
+            </div>
+            <div class="my-4">@await Component.InvokeAsync("HomepageCategories")</div>
+            <div class="my-4">@await Component.InvokeAsync("HomepageProducts", new { productThumbPictureSize = 210 })</div>
+        </div>
+    </div>
+</div>
+@await Component.InvokeAsync("HomepageBestSellers")
+@await Component.InvokeAsync("HomepageNews")

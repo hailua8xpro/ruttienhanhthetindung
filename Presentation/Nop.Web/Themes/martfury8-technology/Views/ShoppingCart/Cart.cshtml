@@ -1,0 +1,50 @@
+﻿@using Nop.Core.Domain.Common
+@inject CommonSettings commonSettings
+@inject IThemeContext themeContext
+@model ShoppingCartModel
+@{
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+    var themeName = themeContext.WorkingThemeName;
+
+    Layout = "_ColumnsOne";
+
+    //title
+    Html.AddTitleParts(T("PageTitle.ShoppingCart").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-shopping-cart-page");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/shoppingcart.css");
+}
+<div class="wrapper-breadcrums">
+    <div class="container">
+        <div class="breadcrumb">
+            <ul itemscope="" itemtype="http://schema.org/BreadcrumbList">
+                <li class="item">
+                    <span>
+                        <a href="@Url.RouteUrl("HomePage")">
+                            <span>@T("Products.Breadcrumb.Top")</span>
+                        </a>
+                    </span>
+                    <span class="delimiter">@breadcrumbDelimiter</span>
+                </li>
+                <li>
+                    <strong class="current-item">@T("ShoppingCart")</strong>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@if (!Model.OnePageCheckoutEnabled)
+{
+    @await Component.InvokeAsync("CheckoutProgress", new { step = CheckoutProgressStep.Cart })
+}
+<div class="page shopping-cart-page">
+    <div class="container">
+        <div class="page-title">
+            <h1>@T("ShoppingCart")</h1>
+        </div>
+        <div class="page-body">
+            @await Component.InvokeAsync("OrderSummary", new { overriddenModel = Model })
+        </div>
+    </div>
+</div>

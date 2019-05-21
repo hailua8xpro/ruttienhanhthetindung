@@ -1,0 +1,34 @@
+﻿@model CatalogPagingFilteringModel
+<div class="toolbar-products">
+    @*view mode*@
+    @if (Model.AllowProductViewModeChanging)
+    {
+        <div class="modes">
+            @if (Model.AvailableViewModes.Count > 1)
+            {
+                var gridMode = Model.AvailableViewModes[0];
+                var listMode = Model.AvailableViewModes[1];
+
+                <a class="modes-mode mode-grid @if(gridMode.Selected){<text>active</text>}" href="@gridMode.Value" title="@gridMode.Text"></a>
+                <a class="modes-mode mode-list @if (listMode.Selected){<text>active</text>}" href="@listMode.Value" title="@listMode.Text"></a>
+            }
+        </div>
+    }
+    @*sorting*@
+    @if (Model.AllowProductSorting)
+    {
+        <div class="toolbar-sorter sorter">
+            <label class="d-none d-md-inline-block sorter-label">@T("Catalog.OrderBy")</label>
+            @Html.DropDownList("products-orderby", Model.AvailableSortOptions, new { onchange = "setLocation(this.value);", aria_label = T("Catalog.OrderBy.Label") })
+        </div>
+    }
+    @*page size*@
+    @if (Model.AllowCustomersToSelectPageSize)
+    {
+        <div class="field limiter d-none d-md-block">
+            <span>@T("Catalog.PageSize")</span>
+            @Html.DropDownList("products-pagesize", Model.PageSizeOptions, new { onchange = "setLocation(this.value);", aria_label = T("Catalog.PageSize.Label") })
+            <span>@T("Catalog.PageSize.PerPage")</span>
+        </div>
+    }
+</div>

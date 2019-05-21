@@ -1,0 +1,73 @@
+﻿@using Nop.Core.Domain.Common
+@model ServiceItemListModel
+@inject CommonSettings commonSettings
+@inject IThemeContext themeContext
+@{
+    Layout = "_ColumnsTwoService";
+    var themeName = themeContext.WorkingThemeName;
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Service").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-news-list-page");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/news.css");
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+}
+@section categorytitle{
+    <div class="page-title-wrapper"><h1 class="page-title" id="page-title-heading" aria-labelledby="page-title-heading toolbar-amount"><span class="base" data-ui-id="page-title-wrapper">@T("Service")</span></h1> </div>
+}
+@section Breadcrumb
+    {
+    <div class="wrapper-breadcrums">
+        <div class="container">
+            <div class="breadcrumb">
+                <ul itemscope itemtype="http://schema.org/BreadcrumbList">
+                    <li>
+                        <a href="@Url.RouteUrl("HomePage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
+                        <span class="delimiter">@breadcrumbDelimiter</span>
+                    </li>
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                        <strong class="current-item" itemprop="name">@T("Service")</strong>
+                        <span itemprop="item" itemscope itemtype="http://schema.org/Thing">
+                            <link itemprop="url" href="@Url.RouteUrl("Service")" />
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="news-list-page">
+    <div class="post-list-wrapper">
+        <div class="row">
+            @foreach (var item in Model.ServiceItems)
+            {
+                <div class="col-6">
+                    <div class="post-item">
+                        <a class="news-title" href="@Url.RouteUrl("ServiceItem", new { SeName = item.SeName })"><img class="img-fluid lazy" data-src="@item.PictureModel.ImageUrl" alt="@item.Name" /></a>
+                        <div class="post-categories">
+                            <a title="@item.ServiceCategoryName" href="@Url.RouteUrl("ServiceCategory", new { SeName = item.ServiceCategorySeName })">@item.ServiceCategoryName</a>
+                        </div>
+                        <h2 class="title">
+                            <a href="@Url.RouteUrl("ServiceItem", new { SeName = item.SeName })">@item.Name</a>
+                        </h2>
+                        <div class="post-posed-date">
+                            <span class="value">@item.CreatedOn.ToString("D")</span>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+        @{
+            var pager = Html.Pager(Model.PagingFilteringContext).QueryParam("pagenumber");
+        }
+        @if (!pager.IsEmpty())
+        {
+            <div class="pager">
+                @pager
+            </div>
+        }
+    </div>
+</div>

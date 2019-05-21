@@ -1,0 +1,72 @@
+﻿@model MiniShoppingCartModel
+<div id="flyout-cart" class="mini-cart-content">
+    <span class="tl-arrow-menu"></span>
+    <div class="shopping_cart_content">
+            @if (Model.TotalProducts == 0)
+            {
+            <div class="count">
+                <p class="cart-empty">@T("ShoppingCart.Mini.NoItems")</p>
+            </div>
+            }
+        @if (Model.TotalProducts > 0)
+        {
+            <ul class="product_list_widget">
+                @for (var i = 0; i < Model.Items.Count; i++)
+                {
+                    var item = Model.Items[i];
+                    <li>
+                        @if (Model.ShowProductImages)
+                        {
+                            <div class="product-image">
+                                <a href="@Url.RouteUrl("Product", new { SeName = item.ProductSeName })" title="@item.Picture.Title">
+                                    <img alt="@item.Picture.AlternateText" src="@item.Picture.ImageUrl" title="@item.Picture.Title" />
+                                </a>
+                            </div>
+                        }
+                        <div class="product-content">
+                            <div class="product-name">
+                                <a href="@Url.RouteUrl("Product", new { SeName = item.ProductSeName })">@item.ProductName</a>
+                            </div>
+                            <span class="quantity">
+                                @item.Quantity x
+                                <span>@item.UnitPrice</span>
+                            </span>
+                            @if (!string.IsNullOrEmpty(item.AttributeInfo))
+                            {
+                                <div class="attributes">
+                                    @Html.Raw(item.AttributeInfo)
+                                </div>
+                            }
+                        </div>
+                        <a href="#" class="action delete"></a>
+                    </li>
+                }
+            </ul>
+            <div class="mf-cart-panel-footer">
+                <p class="total">
+                    <strong>@T("ShoppingCart.Totals.SubTotal"):</strong>
+                    <span class="amount">@Model.SubTotal</span>
+                </p>
+            </div>
+            <p class="buttons">
+                @if (Model.DisplayShoppingCartButton)
+                {
+                    <a class="mainbgcolor button text-white" href="@(Url.RouteUrl("ShoppingCart"))">@T("ShoppingCart.Mini.ViewCart")</a>
+                }
+                @if (Model.DisplayCheckoutButton)
+                {
+                    var checkoutUrl = "";
+                    if (Model.AnonymousCheckoutAllowed && Model.CurrentCustomerIsGuest)
+                    {
+                        checkoutUrl = Url.RouteUrl("LoginCheckoutAsGuest", new { returnUrl = Url.RouteUrl("ShoppingCart") });
+                    }
+                    else
+                    {
+                        checkoutUrl = Url.RouteUrl("Checkout");
+                    }
+                    <a class="mainbgcolor button text-white" href="@checkoutUrl">@T("Checkout.Button")</a>
+                }
+            </p>
+        }
+    </div>
+</div>

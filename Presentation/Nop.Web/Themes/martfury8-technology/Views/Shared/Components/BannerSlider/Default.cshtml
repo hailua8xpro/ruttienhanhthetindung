@@ -1,0 +1,42 @@
+﻿@model IList<BannerModel>
+<div class="swiper-container home-main-slider">
+    <div class="swiper-wrapper">
+        @foreach (var item in Model)
+        {
+            @if (item.ShowCaption)
+            {
+                <div class="swiper-slide">
+                    <div class="item-slider" style="height: 358px; display: block; background: url('@item.ImageUrl') no-repeat center center; background-size: cover;">
+                        @Html.Raw(item.Caption)
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="swiper-slide">
+                    <a href="@item.Url" title="@item.Title">
+                        <img src="@item.ImageUrl" alt="@item.Title" title="@item.Title" />
+                    </a>
+                </div>
+            }
+        }
+    </div>
+    <div class="swiper-button-prev">
+        <i class="mbi mbi-chevron-left"></i>
+    </div>
+    <div class="swiper-button-next">
+        <i class="mbi mbi-chevron-right"></i>
+    </div>
+</div>
+
+    <script asp-location="Footer">
+        $(document).ready(function () {
+            var homemainslider = new Swiper('.home-main-slider', {
+                speed: 400,
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                }
+            });
+        });
+    </script>

@@ -1,0 +1,25 @@
+﻿@model CategoryNavigationModel
+@if (Model.Categories.Count > 0)
+{
+    <div class="block block-nav">
+        <div class="block-title">
+            <strong>@T("Categories")</strong>
+            <span class="toggle-class"></span>
+        </div>
+        <div class="block-content">
+            <ul class="nav-collapse nav-categories">
+                @foreach (var category in Model.Categories)
+                {
+                    var categoryLineModel = new CategoryNavigationModel.CategoryLineModel
+                    {
+                        CurrentCategoryId = Model.CurrentCategoryId,
+                        Category = category
+                    };
+                    @await Html.PartialAsync("_CategoryLine.Navigation", categoryLineModel)
+                }
+            </ul>
+        </div>
+        <div class="close-expand-mb"></div>
+        <div class="close-expanded"></div>
+    </div>
+}

@@ -1,0 +1,105 @@
+﻿@model NewsCategoryModel
+@using Nop.Core.Domain.Common
+@using Nop.Core.Domain.Seo
+@inject Nop.Core.IWebHelper webHelper
+@inject SeoSettings seoSettings
+@inject CommonSettings commonSettings
+@inject IThemeContext themeContext
+@{
+    Layout = "_ColumnsTwoNews";
+    var themeName = themeContext.WorkingThemeName;
+
+    //title
+    Html.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    //meta
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+    //page class
+    Html.AppendPageCssClassParts("html-news-list-page");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/news.css");
+
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var categoryUrl = Url.RouteUrl("NewsCategory", new { SeName = Model.SeName }, webHelper.CurrentRequestProtocol).ToLowerInvariant();
+        Html.AddCanonicalUrlParts(categoryUrl, seoSettings.QueryStringInCanonicalUrlsEnabled);
+    }
+
+    var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
+}
+@*category breadcrumb*@
+@section categorytitle{
+    <div class="page-title-wrapper"><h1 class="page-title" id="page-title-heading" aria-labelledby="page-title-heading toolbar-amount"><span class="base" data-ui-id="page-title-wrapper">@Model.Name</span></h1> </div>
+}
+@section Breadcrumb
+    {
+    @if (Model.DisplayCategoryBreadcrumb)
+    {
+        <div class="wrapper-breadcrums">
+            <div class="container">
+                <div class="breadcrumb">
+                    <ul itemscope itemtype="http://schema.org/BreadcrumbList">
+                        <li>
+                            <a href="@Url.RouteUrl("HomePage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
+                            <span class="delimiter">@breadcrumbDelimiter</span>
+                        </li>
+                        @{ int position = 1; }
+                        @foreach (var cat in Model.CategoryBreadcrumb)
+                        {
+                            var isLastCategory = cat.Id == Model.Id;
+                            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                                @if (isLastCategory)
+                                {
+                                    <strong class="current-item" itemprop="name">@cat.Name</strong>
+                                    <span itemprop="item" itemscope itemtype="http://schema.org/Thing">
+                                        <link itemprop="url" href="@Url.RouteUrl("NewsCategory", new {SeName = cat.SeName})" />
+                                    </span>
+                                }
+                                else
+                                {
+                                    <a href="@Url.RouteUrl("NewsCategory", new { SeName = cat.SeName })" title="@cat.Name" itemprop="item">
+                                        <span itemprop="name">@cat.Name</span>
+                                    </a>
+                                    <span class="delimiter">@breadcrumbDelimiter</span>
+                                }
+                                <meta itemprop="position" content="@position" />
+                            </li>
+                            position++;
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+<div class="news-list-page">
+    <div class="post-list-wrapper">
+        <div class="row">
+            @foreach (var item in Model.NewsItemListModel.NewsItems)
+            {
+                <div class="col-6"><div class="post-item">
+                        <a class="news-title" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })"><img class="img-fluid lazy" data-src="@item.PictureModel.ImageUrl" alt="@item.Title" /></a>
+                        <div class="post-categories">
+                            <a title="@item.NewsCategoryName" href="@Url.RouteUrl("NewsCategory", new { SeName = item.NewsCategorySeName })">@item.NewsCategoryName</a>
+                        </div>
+                        <h2 class="title">
+                            <a href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })">@item.Title</a>
+                        </h2>
+                        <div class="post-posed-date">
+                            <span class="value">@item.CreatedOn.ToString("D")</span>
+                        </div>
+                   
+                </div></div>
+            }
+        </div>
+        @{
+            var pager = Html.Pager(Model.NewsItemListModel.PagingFilteringContext).QueryParam("pagenumber");
+        }
+        @if (!pager.IsEmpty())
+        {
+            <div class="pager">
+                @pager
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,193 @@
+﻿@model BannerSearchModel
+@using Nop.Services
+@using Nop.Core.Domain.Banners
+@{
+    //page title
+    ViewBag.Title = T("Admin.ContentManagement.Banners").Text;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName("Banners");
+}
+
+<nop-antiforgery-token />
+    <div class="content-header clearfix">
+        <h1 class="pull-left">
+            @T("Admin.ContentManagement.Banners")
+        </h1>
+        <div class="pull-right">
+            <a asp-action="Create" class="btn bg-blue">
+                <i class="fa fa-plus-square"></i>
+                @T("Admin.Common.AddNew")
+            </a>
+            @await Component.InvokeAsync("AdminWidget", new { widgetZone = AdminWidgetZones.ManufacturerListButtons })
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="form-horizontal">
+            <div class="panel-group">
+                <div class="panel panel-default panel-search">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="Type" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="Type" asp-items="@((BannerType)Model.Type).ToSelectList()" />
+                                    </div>
+                                </div>
+                                <div class="form-group" @(Model.AvailableStores.SelectionIsNotPossible() ? Html.Raw("style=\"display:none\"") : null)>
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="SearchStoreId" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="SearchStoreId" asp-items="Model.AvailableStores" />
+                                    </div>
+                                </div>
+                                <div class="form-group wrap-cate-list hide">
+                                    <div class="col-md-4">
+                                        <nop-label asp-for="CategoryId" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <nop-select asp-for="CategoryId" asp-items="Model.AvailableCategoryEntity" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-8 col-md-offset-4">
+                                        <button type="button" id="search-banners" class="btn btn-primary btn-search">
+                                            <i class="fa fa-search"></i>
+                                            @T("Admin.Common.Search")
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="banners-grid"></div>
+
+                        <script>
+                        $(document).ready(function() {
+                            $("#banners-grid").kendoGrid({
+                                dataSource: {
+                                    type: "json",
+                                    transport: {
+                                        read: {
+                                            url: "@Html.Raw(Url.Action("List", "Banner"))",
+                                            type: "POST",
+                                            dataType: "json",
+                                            data: function() {
+                                                var data = {
+                                                    Type: $('#@Html.IdFor(model => model.Type)').val(),
+                                                    CategoryId: $('#@Html.IdFor(model => model.CategoryId)').val(),
+                                                    SearchStoreId:$('#@Html.IdFor(model => model.SearchStoreId)').val()
+                                                };
+                                                addAntiForgeryToken(data);
+                                                return data;
+                                            }
+                                        }
+                                    },
+                                    schema: {
+                                        data: "Data",
+                                        total: "Total",
+                                        errors: "Errors"
+                                    },
+                                    error: function(e) {
+                                        display_kendoui_grid_error(e);
+                                        // Cancel the changes
+                                        this.cancelChanges();
+                                    },
+                                    pageSize: @(Model.PageSize),
+                                    serverPaging: true,
+                                    serverFiltering: true,
+                                    serverSorting: true
+                                },
+                                pageable: {
+                                    refresh: true,
+                                    pageSizes: [@(Model.AvailablePageSizes)],
+                                    @await Html.PartialAsync("_GridPagerMessages")
+                                },
+                                editable: {
+                                    confirmation: "@T("Admin.Common.DeleteConfirmation")",
+                                    mode: "inline"
+                                },
+                                scrollable: false,
+                                columns: [
+                                {
+                                    field: "PictureThumbnailUrl",
+                                    title: "@T("Admin.ContentManagement.Banners.Fields.Picture")",
+                                        template: '<img src="#=ImageUrl#" />',
+                                    width: 100
+                                }, {
+                                    field: "Published",
+                                    title: "@T("Admin.ContentManagement.Banners.Fields.Published")",
+                                    width: 100,
+                                    headerAttributes: { style: "text-align:center" },
+                                    attributes: { style: "text-align:center" },
+                                    template: '# if(Published) {# <i class="fa fa-check true-icon"></i> #} else {# <i class="fa fa-close false-icon"></i> #} #'
+                                }, {
+                                    field: "DisplayOrder",
+                                    title: "@T("Admin.DisplayOrder")",
+                                    width: 150
+                                }, {
+                                    field: "Id",
+                                    title: "@T("Admin.Common.Edit")",
+                                    width: 100,
+                                    headerAttributes: { style: "text-align:center" },
+                                    attributes: { style: "text-align:center" },
+                                    template: '<a class="btn btn-default" href="Edit/#=Id#"><i class="fa fa-pencil"></i>@T("Admin.Common.Edit")</a>'                                }
+                                ]
+                            });
+                        });
+                        </script>
+
+                        <script>
+                        $(document).ready(function() {
+                            //search button
+                            $('#search-banners').click(function() {
+                                //search
+                                var grid = $('#banners-grid').data('kendoGrid');
+                                grid.dataSource.page(1); //new search. Set page size to 1
+                                //grid.dataSource.read(); we already loaded the grid above using "page" function
+                                return false;
+                            });
+                            $("#@Html.IdFor(model => model.Type)").change(function () {
+                            var ddlCategory = $("#@Html.IdFor(model => model.CategoryId)");
+                                var selectedItem = $(this).val();
+                                if (selectedItem !=@((int)BannerType.ProductCategory)) {
+                                    $('.wrap-cate-list').addClass('hide');
+                                    ddlCategory.html('');
+                                    ddlCategory.append($('<option></option>').val(0).html('@T("Admin.Common.All")'));
+                                    return false;
+                                }
+                                $('.wrap-cate-list').removeClass('hide');
+
+                            $.ajax({
+                                cache: false,
+                                type: "GET",
+                                url: "@(Url.Action("GetCategoriesByBannerType", "Banner"))",
+                                data: { "type": selectedItem},
+                                success: function(data) {
+                                    ddlCategory.html('');
+                                    ddlCategory.append($('<option></option>').val(0).html('@T("Admin.Common.All")'));
+                                    $.each(data, function(id, option) {
+                                        ddlCategory.append($('<option></option>').val(option.Value).html(option.Text));
+                                    });
+                                },
+                                error: function(xhr, ajaxOptions, thrownError) {
+                                    alert('Failed to retrieve states.');
+                                }
+                            });
+                        });
+
+                        });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

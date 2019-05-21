@@ -1,0 +1,138 @@
+﻿@model ProductDetailsModel.AddToCartModel
+@using Nop.Core.Domain.Orders
+@if (Model.UpdatedShoppingCartItemId > 0)
+{
+    <input asp-for="UpdatedShoppingCartItemId" type="hidden" />
+}
+@if (!Model.DisableBuyButton || Model.CustomerEntersPrice)
+{
+    <div class="sticky-addcart-wrap float-md-left" style="min-height: 62px;">
+        @if (Model.CustomerEntersPrice)
+        {
+            <div class="customer-entered-price">
+                <div class="price-input">
+                    <label asp-for="CustomerEnteredPrice" asp-postfix=":" class="enter-price-label"></label>
+                    @*round price*@
+                    <input asp-for="CustomerEnteredPrice" value="@Convert.ToInt32(Math.Ceiling(Model.CustomerEnteredPrice))" class="enter-price-input" />
+                </div>
+                <div class="price-range">
+                    @Model.CustomerEnteredPriceRange
+                </div>
+            </div>
+        }
+        
+        @if (!Model.DisableBuyButton)
+        {
+            <div class="sticky-addcart">
+                <div class="box-tocart">
+                    <div class="page-title-wrapper product">
+                        <h1 class="page-title">
+
+                        </h1>
+                    </div>
+                    <div class="fieldset-add">
+                        <div class="field">
+                            @if (Model.AllowedQuantities.Count > 0)
+                            {
+                                <select asp-for="EnteredQuantity" asp-items="Model.AllowedQuantities" class="qty-dropdown"></select>
+                            }
+                            else
+                            {
+                                <div class="control">
+                                    <div class="custom-qty reduced">
+                                        <button type="button" class="btn-qty minus"><span class="mbi mbi-minus"></span></button>
+
+                                    </div>
+                                    <input asp-for="EnteredQuantity" class="input-text qty" type="text" />
+                                    <div class="custom-qty increase">
+                                        <button type="button" class="btn-qty plus"><span class="mbi mbi-plus"></span></button>
+                                    </div>
+                                </div>
+
+                                <script asp-location="Footer">
+                        //when a customer clicks 'Enter' button we submit the "add to cart" button (if visible)
+                            $(document).ready(function () {
+                                var newVal,
+                                    defaultValue = $('.input-text.qty').val(),
+                                    inrement = 1;
+
+                                $(".btn-qty").click(function (event) {
+                                    var $button = $(this),
+                                        oldValue = $button.closest('.control').find(".input-text.qty").val();
+
+                                    if (!oldValue || oldValue < inrement) {
+                                        oldValue = 0;
+                                    }
+
+                                    if ($button.hasClass('plus')) {
+                                        newVal = parseFloat(oldValue) + inrement;
+                                    } else {
+                                        if (oldValue > defaultValue && parseFloat(oldValue) - inrement > 0) {
+                                            newVal = parseFloat(oldValue) - inrement;
+                                        } else {
+                                            newVal = defaultValue;
+                                        }
+                                    }
+
+                                    $button.closest('.control').find(".input-text.qty").val(newVal);
+                                });
+
+                            $("#@Html.IdFor(model => model.EnteredQuantity)").on("keydown", function(event) {
+                                if (event.keyCode == 13) {
+                                    $("#add-to-cart-button-@Model.ProductId").trigger("click");
+                                    return false;
+                                }
+                            });
+                        });
+                                </script>
+                            }
+                            
+                        </div>
+
+                        <div class="actions">
+                            @{
+                                var addToCartText = "";
+                                if (Model.UpdatedShoppingCartItemId > 0 && Model.UpdateShoppingCartItemType.HasValue && Model.UpdateShoppingCartItemType.Value == ShoppingCartType.ShoppingCart)
+                                {
+                                    addToCartText = T("ShoppingCart.AddToCart.Update").Text;
+                                }
+                                else
+                                {
+                                    addToCartText = T("ShoppingCart.AddToCart").Text;
+                                    if (Model.IsRental)
+                                    {
+                                        addToCartText = T("ShoppingCart.Rent").Text;
+                                    }
+                                    if (Model.AvailableForPreOrder)
+                                    {
+                                        addToCartText = T("ShoppingCart.PreOrder").Text;
+                                    }
+                                }
+                                @if (!Model.IsAddFromQuicView)
+                                {
+                                    <button id="add-to-cart-button-@Model.ProductId" class="tocart btn btn-primary" data-productid="@Model.ProductId" onclick="AjaxCart.addproducttocart_details('@Url.RouteUrl("AddProductToCart-Details", new {productId = Model.ProductId, shoppingCartTypeId = (int) ShoppingCartType.ShoppingCart})', '#product-details-form');return false;">
+                                        <span>@addToCartText</span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button id="add-to-cart-button-@Model.ProductId" class="tocart btn btn-primary" data-productid="@Model.ProductId" onclick="AjaxCart.addproducttocart_quickview('@Url.RouteUrl("AddProductToCart-Details", new {productId = Model.ProductId, shoppingCartTypeId = (int) ShoppingCartType.ShoppingCart})', '#product-details-form');return false;">
+                                        <span>@addToCartText</span>
+                                    </button>
+                                }
+
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            if (!string.IsNullOrEmpty(Model.PreOrderAvailabilityStartDateTimeUserTime))
+            {
+                <div class="pre-order-availability-date">
+                    <label>@T("ShoppingCart.PreOrderAvailability"):</label>
+                    @Html.Raw(Model.PreOrderAvailabilityStartDateTimeUserTime)
+                </div>
+            }
+        }
+    </div>
+}
