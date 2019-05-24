@@ -71,7 +71,9 @@ namespace Nop.Web.Infrastructure
 
             //product search
             routeBuilder.MapLocalizedRoute("ProductSearch", "search/",
-				new { controller = "Catalog", action = "Search" });                     
+				new { controller = "Catalog", action = "Search" });
+            routeBuilder.MapLocalizedRoute("NewsSearch", "tim-kiem/",
+                new { controller = "News", action = "Search" });
 
             routeBuilder.MapLocalizedRoute("ProductSearchAutoComplete", "catalog/searchtermautocomplete",
 				new { controller = "Catalog", action = "SearchTermAutoComplete" });
@@ -115,7 +117,7 @@ namespace Nop.Web.Infrastructure
             //product tags
             routeBuilder.MapLocalizedRoute("ProductTagsAll", "producttag/all/",
 				new { controller = "Catalog", action = "ProductTagsAll" });
-            routeBuilder.MapLocalizedRoute("Service", "dich-vu",
+            routeBuilder.MapLocalizedRoute("ServiceArchive", "dich-vu",
                 new { controller = "Service", action = "List" });
             //manufacturers
             routeBuilder.MapLocalizedRoute("ManufacturerList", "manufacturer/all/",

@@ -38,9 +38,9 @@
                 <div class="widget block blog-search">
                 <div class="block-title"><strong>@T("news.searchnews")</strong><span class="toggle-class"></span></div>
                     <div class="block-content">
-                    <form class="form"  action="" method="get">
+                    <form class="form" asp-route="NewsSearch" method="get">
                     <div class="field search">
-                        <label class="label" for="blog_search"><span>@T("Search")</span></label> <div class="control"><input id="blog_search" type="text" name="q" value="" placeholder="@T("news.seachkeyword")" class="input-text" maxlength="128" role="combobox" aria-haspopup="false" aria-autocomplete="both" autocomplete="off"></div>
+                        <label class="label" for="blog_search"><span>@T("Search")</span></label> <div class="control"><input id="blog_search" type="text" name="q" value="" placeholder="@T("news.seachkeyword")" class="input-text form-control" maxlength="128" role="combobox" aria-haspopup="false" aria-autocomplete="both" autocomplete="off"></div>
                                                                                                  <button type="submit" title="Search" class="action search"><span>@T("Search")</span></button>
                     </div>
                         

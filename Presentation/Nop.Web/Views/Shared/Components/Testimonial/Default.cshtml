@@ -1,0 +1,29 @@
+﻿@model IList<TestimonialModel>
+<div class="swiper-container testimonial-slider">
+    <div class="swiper-wrapper">
+        @foreach (var item in Model)
+        {
+        <div class="swiper-slide">
+            <div class="text-center"><img class="img-fluid img-rounded" src="@item.ImageUrl" alt="@item.FullName" /></div>
+            <p class="lead">@item.FullName</p>
+            <p class="text-gray">@item.FullName</p>
+            <p class="text-primary">@item.FullDescription</p>
+        </div>
+        }
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        var testimonialslider = new Swiper('.testimonial-slider', {
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                renderBullet: function (index, className) {
+                    return '<span class="' + className + '">' + (index + 1) + '</span>';
+                },
+            },
+        })
+    });
+</script>

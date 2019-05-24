@@ -1,5 +1,9 @@
 ﻿@model TopMenuModel
-
+@{ 
+    var rootNewsCategories = Model.NewsCategories != null ? Model.NewsCategories.Where(x => x.IncludeInTopMenu) : null;
+    var rootServiceCategories = Model.ServiceCategories != null ? Model.ServiceCategories.Where(x => x.IncludeInTopMenu) : null;
+    var services = Model.Services != null ? Model.Services.Where(x => x.IncludeInTopMenu) : null;
+}
 <div class="magebig-mobile-menu overlay-contentpush">
     <div class="nav-bar-wrap">
         <nav class="nav-bar">
@@ -7,17 +11,6 @@
                 @await Component.InvokeAsync("Logo")
             </div>
             <ul id="mb-collapsible" class="nav-collapse nav-mobile-accordion">
-                @{
-                    var rootCategories = Model.Categories.Where(x => x.IncludeInTopMenu).ToList();
-                }
-                @foreach (var category in rootCategories)
-                {
-                    var categoryLineModel = new TopMenuModel.CategoryLineModel
-                    {
-                        Category = category
-                    };
-                    @await Html.PartialAsync("_CategoryLine.TopMenu", categoryLineModel)
-                }
                 @if (Model.DisplayHomePageMenuItem)
                 {
                     <li><a href="@Url.RouteUrl("HomePage")">@T("HomePage")</a></li>
@@ -26,12 +19,12 @@
                 {
                     <li>
                         <a href="@Url.RouteUrl("NewsArchive")">@T("News")</a>
-                        @if (Model.NewsCategories != null && Model.NewsCategories.Any())
+                        @if (rootNewsCategories != null && rootNewsCategories.Any())
                         {
                             <i class="mbi mbi-ios-arrow-down"></i>
                             <div class="simple-dropdown submenu show-sub">
                                 <ul>
-                                    @foreach (var newscate in Model.NewsCategories)
+                                    @foreach (var newscate in rootNewsCategories)
                                     {
                                         <li><a href="@Url.RouteUrl("Category", new { SeName = newscate.SeName })">@newscate.Name</a></li>
                                     }
@@ -40,6 +33,43 @@
                         }
                     </li>
                 }
+                @if (Model.ServiceEnabled && Model.DisplayServiceMenuItem && Model.DisplayServiceCategoryMenuItem)
+                {
+                    <li>
+                        <a href="@Url.RouteUrl("ServiceArchive")">@T("Service")</a>
+                        @if (rootServiceCategories != null && rootServiceCategories.Any())
+                        {
+                            <i class="mbi mbi-ios-arrow-down"></i>
+                            <div class="simple-dropdown submenu show-sub">
+                                <ul>
+                                    @foreach (var servicecate in rootNewsCategories)
+                                    {
+                                        <li><a href="@Url.RouteUrl("ServiceCategory", new { SeName = servicecate.SeName })">@servicecate.Name</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    </li>
+                }
+                else if (Model.ServiceEnabled && Model.DisplayServiceMenuItem && !Model.DisplayServiceCategoryMenuItem)
+                {
+                    <li>
+                        <a href="@Url.RouteUrl("ServiceArchive")">@T("Service")</a>
+                        @if (services != null && services.Any())
+                        {
+                            <i class="mbi mbi-ios-arrow-down"></i>
+                            <div class="simple-dropdown submenu show-sub">
+                                <ul>
+                                    @foreach (var service in services)
+                                    {
+                                        <li><a href="@Url.RouteUrl("ServiceItem", new { SeName = service.SeName })">@service.Name</a></li>
+                                    }
+                                </ul>
+                            </div>
+                        }
+                    </li>
+                }
+
                 @foreach (var topic in Model.Topics)
                 {
                     <li><a href="@Url.RouteUrl("Topic", new { SeName = topic.SeName })">@topic.Name</a></li>

@@ -43,7 +43,7 @@
         <div class="row">
             @foreach (var item in Model.NewsItems)
             {
-                <div class="col-6">
+                <div class="col-12 col-sm-6">
                     <div class="post-item">
                         <a class="news-title" href="@Url.RouteUrl("NewsItem", new { SeName = item.SeName })"><img class="img-fluid lazy" data-src="@item.PictureModel.ImageUrl" alt="@item.Title" /></a>
                         <div class="post-categories">

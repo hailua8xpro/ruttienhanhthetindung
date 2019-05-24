@@ -50,6 +50,7 @@ using Nop.Services.Shipping.Date;
 using Nop.Services.Stores;
 using Nop.Services.Tasks;
 using Nop.Services.Tax;
+using Nop.Services.Testimonials;
 using Nop.Services.Themes;
 using Nop.Services.Topics;
 using Nop.Services.Vendors;
@@ -128,6 +129,7 @@ namespace Nop.Web.Framework.Infrastructure
             builder.RegisterType<BackInStockSubscriptionService>().As<IBackInStockSubscriptionService>().InstancePerLifetimeScope();
             builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerLifetimeScope();
             builder.RegisterType<ServiceService>().As<IServiceService>().InstancePerLifetimeScope();
+            builder.RegisterType<TestimonialService>().As<ITestimonialService>().InstancePerLifetimeScope();
             builder.RegisterType<CompareProductsService>().As<ICompareProductsService>().InstancePerLifetimeScope();
             builder.RegisterType<RecentlyViewedProductsService>().As<IRecentlyViewedProductsService>().InstancePerLifetimeScope();
             builder.RegisterType<ManufacturerService>().As<IManufacturerService>().InstancePerLifetimeScope();

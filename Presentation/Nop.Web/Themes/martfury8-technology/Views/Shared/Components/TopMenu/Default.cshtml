@@ -2,10 +2,9 @@
 <ul class="smartmenu magebig-nav">
     @if (Model.DisplayHomePageMenuItem)
     {
-        <li><a href="@Url.RouteUrl("HomePage")">@T("HomePage")</a></li>
+        <li><a href="@Url.RouteUrl("HomePage")"><i class="mbi mbi-home5"></i> @T("HomePage")</a></li>
     }
     @{
-        var rootCategories = Model.Categories!=null?Model.Categories?? Model.Categories.Where(x => x.IncludeInTopMenu):null;
         var rootNewsCategories = Model.NewsCategories!=null? Model.NewsCategories.Where(x => x.IncludeInTopMenu):null;
         var rootServiceCategories = Model.ServiceCategories!=null? Model.ServiceCategories.Where(x => x.IncludeInTopMenu):null;
         var services = Model.Services!=null? Model.Services.Where(x => x.IncludeInTopMenu):null;
@@ -56,7 +55,7 @@
     @if (Model.ServiceEnabled && Model.DisplayServiceMenuItem && Model.DisplayServiceCategoryMenuItem)
     {
         <li>
-            <a href="@Url.RouteUrl("Service")">@T("Service")</a>
+            <a href="@Url.RouteUrl("ServiceArchive")">@T("Service")</a>
             @if (rootServiceCategories != null && rootServiceCategories.Any())
             {
                 <i class="mbi mbi-ios-arrow-down"></i>
@@ -74,7 +73,7 @@
     else if (Model.ServiceEnabled && Model.DisplayServiceMenuItem && !Model.DisplayServiceCategoryMenuItem)
     {
         <li>
-            <a href="@Url.RouteUrl("Service")">@T("Service")</a>
+            <a href="@Url.RouteUrl("ServiceArchive")">@T("Service")</a>
             @if (services != null && services.Any())
             {
                 <i class="mbi mbi-ios-arrow-down"></i>

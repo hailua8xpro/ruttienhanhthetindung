@@ -680,6 +680,7 @@ namespace Nop.Web.Infrastructure.Cache
         public const string SERVICEITEM_PICTURE_MODEL_KEY = "Nop.pres.service.picture-{0}-{1}-{2}";
         public const string SERVICEITEM_CATEGORY_KEY = "Nop.pres.service.serviceitem.categoryfirst-{0}-{1}";
         public const string HOMEPAGE_SERVICESMODEL_KEY = "Nop.pres.service.homepage-{0}-{1}";
+        public const string SERVICEITEM_OTHERSERVICE_KEY = "Nop.pres.service.otherservice-{0}-{1}-{2}";
 
         /// <summary>
         /// Key for home page news

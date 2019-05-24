@@ -1,0 +1,42 @@
+﻿@model IList<ServiceItemModel>
+@if (Model!=null && Model.Any())
+{
+    <div class="block-news block-service py-5">
+        <div class="container pb-5">
+            <div class="block-blog-main">
+                <div class="top-title border-bottom  mb-4">
+                    <h2 class="title">
+                        @T("Service")
+                    </h2>
+                </div>
+                <div class="blog-post-wrap">
+                    <div class="row">
+                        @foreach (var item in Model)
+                        {
+                            <div class="col-12 col-sm-4">
+                                <div class="post-item">
+                                    @if (item.PictureModel != null)
+                                    {
+                                        <a class="position-relative post-item-image" href="@Url.RouteUrl("Service", new { SeName = item.SeName })">
+                                            <img class="img-fluid lazy rounded" data-src="@item.PictureModel.ImageUrl" alt="@item.Name" title="@item.Name" />
+                                        </a>
+                                    }
+
+                                    <h3 class="title">
+                                        <a href="@Url.RouteUrl("Service", new { SeName = item.SeName })" title="@item.Name">@item.Name</a>
+                                    </h3>
+                                    <p class="description">
+                                        @Html.Raw(item.Short)
+                                    </p>
+                                    <p><a class="btn btn-outline btn-primary" href="@Url.RouteUrl("Service", new { SeName = item.SeName })">Xem thêm</a></p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}

@@ -23,6 +23,7 @@ using Nop.Core.Domain.Shipping;
 using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Tasks;
 using Nop.Core.Domain.Tax;
+using Nop.Core.Domain.Testimonial;
 using Nop.Core.Domain.Topics;
 using Nop.Core.Domain.Vendors;
 using Nop.Core.Infrastructure;
@@ -61,6 +62,7 @@ using Nop.Web.Areas.Admin.Models.Stores;
 using Nop.Web.Areas.Admin.Models.Tasks;
 using Nop.Web.Areas.Admin.Models.Tax;
 using Nop.Web.Areas.Admin.Models.Templates;
+using Nop.Web.Areas.Admin.Models.Testimonials;
 using Nop.Web.Areas.Admin.Models.Topics;
 using Nop.Web.Areas.Admin.Models.Vendors;
 using Nop.Web.Framework.Models;
@@ -108,6 +110,8 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
             CreateVendorsMaps();
             CreateServiceCategoryMaps();
             CreateServiceMaps();
+            CreateTestimonialsMaps();
+                
             //add some generic mapping rules
             ForAllMaps((mapConfiguration, map) =>
             {
@@ -169,6 +173,7 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
                     }
                 }
             });
+
             #region custom
             CreateBannersMaps();
             #endregion
@@ -1279,7 +1284,15 @@ namespace Nop.Web.Areas.Admin.Infrastructure.Mapper
             CreateMap<VendorSettingsModel, VendorSettings>()
                 .ForMember(settings => settings.DefaultVendorPageSizeOptions, options => options.Ignore());
         }
-
+        protected virtual void CreateTestimonialsMaps()
+        {
+            CreateMap<Testimonial, TestimonialModel>()
+              .ForMember(model => model.ImageUrl, options => options.Ignore())
+              .ForMember(model => model.Locales, options => options.Ignore());
+            CreateMap<TestimonialModel, Testimonial>()
+                .ForMember(model => model.CreatedOnUtc, options => options.Ignore())
+                .ForMember(model => model.UpdatedOnUtc, options => options.Ignore());
+        }
 
         #region custom
         protected virtual void CreateBannersMaps()

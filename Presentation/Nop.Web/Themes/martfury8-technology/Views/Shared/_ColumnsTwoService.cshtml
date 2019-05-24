@@ -40,7 +40,7 @@
                     <div class="block-content">
                     <form class="form"  action="" method="get">
                     <div class="field search">
-                        <label class="label" for="blog_search"><span>@T("Search")</span></label> <div class="control"><input id="blog_search" type="text" name="q" value="" placeholder="@T("services.seachkeyword")" class="input-text" maxlength="128" role="combobox" aria-haspopup="false" aria-autocomplete="both" autocomplete="off"></div>
+                        <label class="label" for="blog_search"><span>@T("Search")</span></label> <div class="control"><input id="blog_search" type="text" name="q" value="" placeholder="@T("services.seachkeyword")" class="input-text form-control" maxlength="128" role="combobox" aria-haspopup="false" aria-autocomplete="both" autocomplete="off"></div>
                                                                                                  <button type="submit" title="Search" class="action search"><span>@T("Search")</span></button>
                     </div>
                         
@@ -50,6 +50,7 @@
                 <div class="close-expanded"></div>
                 </div>
                 @await Component.InvokeAsync("ServiceCategoryNavigation", new { currentCategoryId = currentCategoryId, currentServiceId = currentServiceId })
+                @RenderSection("otherservice",false)
             </div>
         </div>
     </div>

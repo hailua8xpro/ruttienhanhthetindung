@@ -399,8 +399,12 @@ ul.nav-news-categories {
             .news-list-homepage .view-all a:hover {
                 color: #4ab2f1;
             }
-/*#region comment */
 
+
+/*#region comment */
+.comment-content .comment-time label{
+    margin-bottom:0;
+}
 .new-comment {
     margin: 50px 0 60px;
 }

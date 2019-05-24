@@ -22,8 +22,9 @@ namespace Nop.Web.Factories
         /// Prepare the home page Service items model
         /// </summary>
         /// <returns>Home page Service items model</returns>
-        IList<ServiceItemModel> PrepareHomePageServiceItemsModel();
         IList<ServiceSimpleModel> PrepareServiceSimpleModels();
+        IList<ServiceItemModel> PrepareHomePageServiceItemsModel();
+        IList<ServiceItemModel> PrepareOtherServiceItemsModel(int serviceId);
         /// <summary>
         /// Prepare the Service item list model
         /// </summary>

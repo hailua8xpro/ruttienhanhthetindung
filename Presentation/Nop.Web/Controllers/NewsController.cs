@@ -104,6 +104,14 @@ namespace Nop.Web.Controllers
             var model = _newsModelFactory.PrepareNewsItemListModel(command);
             return View(model);
         }
+        public virtual IActionResult Search(string q,NewsPagingFilteringModel command)
+        {
+            if (!_newsSettings.Enabled)
+                return RedirectToRoute("HomePage");
+
+            var model = _newsModelFactory.PrepareSearchNewsItemListModel(q,command);
+            return View(model);
+        }
         public virtual IActionResult Category(int categoryId, NewsPagingFilteringModel command)
         {
             if (!_newsSettings.Enabled)

@@ -1,6 +1,8 @@
 ﻿@{
     Layout = "_Root.Head";
 }
+@using Nop.Core
+@inject IStoreContext storeContext
 <script asp-location="Footer">
     AjaxCart.init(false, '.menu-item-cart .counter-number', '.wishlist .counter-number', '#flyout-cart');
 </script>
@@ -42,3 +44,8 @@
         </div>
     </div>
 </div>
+<a href="tel:@storeContext.CurrentStore.CompanyPhoneNumber" class="dv-mobile-phone" title="Hotline: @storeContext.CurrentStore.CompanyPhoneNumber">
+    <div class="dv-mobile-ph-circle"></div>
+    <div class="dv-mobile-ph-circle-fill"></div>
+    <div class="dv-mobile-ph-img-circle"></div>
+</a>

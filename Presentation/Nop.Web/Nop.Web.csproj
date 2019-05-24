@@ -46,6 +46,7 @@
     <None Remove="Themes\martfury8-technology\Content\css\news.css" />
     <None Remove="Themes\martfury8-technology\Content\css\productitem.css" />
     <None Remove="Themes\martfury8-technology\Content\css\quickview.css" />
+    <None Remove="Themes\martfury8-technology\Content\css\service.css" />
     <None Remove="Themes\martfury8-technology\Content\css\shoppingcart.css" />
     <None Remove="Themes\martfury8-technology\Content\css\style.css" />
     <None Remove="Themes\martfury8-technology\Content\images\ajax-loader-small.gif" />
@@ -268,6 +269,7 @@
     <None Include="Themes\martfury8-technology\Views\Shared\Components\NewsCategoryNavigation\Default.cshtml" />
     <None Include="Themes\martfury8-technology\Views\Shared\Components\Testimonial\Default.cshtml" />
     <None Include="Themes\martfury8-technology\Views\Shared\Components\VerticalMenu\Default.cshtml" />
+    <None Include="Views\Shared\Components\Testimonial\Default.cshtml" />
     <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-grid.min.css.map" />
     <None Include="wwwroot\lib\bootstrap-4.3.1\css\bootstrap-reboot.css.map" />
@@ -367,6 +369,9 @@
     <Content Update="Themes\martfury8-technology\Views\Home\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Themes\martfury8-technology\Views\News\Search.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Themes\martfury8-technology\Views\Service\Category.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -428,6 +433,12 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Themes\martfury8-technology\Views\Shared\Components\HomepageNewProducts\Default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Themes\martfury8-technology\Views\Shared\Components\OtherService\Default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Themes\martfury8-technology\Views\Shared\Components\HomepageService\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Themes\martfury8-technology\Views\Shared\Components\HomepageNews\Default.cshtml">

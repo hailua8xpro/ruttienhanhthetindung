@@ -36,5 +36,6 @@ namespace Nop.Web.Factories
         /// <param name="command">News paging filtering model</param>
         /// <returns>News item list model</returns>
         NewsItemListModel PrepareNewsItemListModel(NewsPagingFilteringModel command);
+        NewsItemListModel PrepareSearchNewsItemListModel(string q,NewsPagingFilteringModel command);
     }
 }

@@ -14,7 +14,7 @@
     Html.AddMetaKeywordParts(Model.MetaKeywords);
     //page class
     Html.AppendPageCssClassParts("html-service-item-page");
-    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/news.css");
+    Html.AppendCssFileParts($"~/Themes/{themeName}/Content/css/service.css");
     var breadcrumbDelimiter = commonSettings.BreadcrumbDelimiter;
 
 }
@@ -31,19 +31,27 @@
                         <a href="@Url.RouteUrl("HomePage")" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
                         <span class="delimiter">@breadcrumbDelimiter</span>
                     </li>
-                    @{ int position = 1; }
-                    @foreach (var cat in Model.CategoryBreadcrumb)
+                    <li>
+                        <a href="@Url.RouteUrl("ServiceArchive")" title="@T("Service")">@T("Service")</a>
+                        <span class="delimiter">@breadcrumbDelimiter</span>
+                    </li>
+                    @if (Model.CategoryBreadcrumb != null)
                     {
-                        var isLastCategory = cat.Id == Model.Id;
-                        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+                        int position = 1;
+                        foreach (var cat in Model.CategoryBreadcrumb)
+                        {
+                            var isLastCategory = cat.Id == Model.Id;
+                            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
                                 <a href="@Url.RouteUrl("ServiceCategory", new { SeName = cat.SeName })" title="@cat.Name" itemprop="item">
                                     <span itemprop="name">@cat.Name</span>
                                 </a>
                                 <span class="delimiter">@breadcrumbDelimiter</span>
-                            <meta itemprop="position" content="@position" />
-                        </li>
-                        position++;
+                                <meta itemprop="position" content="@position" />
+                            </li>
+                            position++;
+                        }
                     }
+
                     <li>
                         <span>@Model.Name</span>
                     </li>
@@ -62,3 +70,6 @@
         </div>
     </div>
 </div>
+@section otherservice{
+    @await Component.InvokeAsync("OtherService", new { serviceId =Model.Id})
+}

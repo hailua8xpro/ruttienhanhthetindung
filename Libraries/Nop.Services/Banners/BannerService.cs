@@ -75,7 +75,8 @@ namespace Nop.Services.Banners
                 query = query.Distinct();
             }
 
-            query = query.OrderByDescending(b => b.CreatedOnUtc);
+            query = query.OrderBy(b => b.DisplayOrder);
+
 
             var banners = new PagedList<Banner>(query, pageIndex, pageSize);
             return banners;

@@ -262,6 +262,32 @@ namespace Nop.Web.Factories
             return model;
         }
 
+       public NewsItemListModel PrepareSearchNewsItemListModel(string q, NewsPagingFilteringModel command)
+        {
+            var model = new NewsItemListModel
+            {
+                WorkingLanguageId = _workContext.WorkingLanguage.Id
+            };
+
+            if (command.PageSize <= 0) command.PageSize = _newsSettings.NewsArchivePageSize;
+            if (command.PageNumber <= 0) command.PageNumber = 1;
+
+            var newsItems = _newsService.SearchNews(0,q,_workContext.WorkingLanguage.Id, _storeContext.CurrentStore.Id,
+                command.PageNumber - 1, command.PageSize);
+            model.PagingFilteringContext.LoadPagedList(newsItems);
+
+            model.NewsItems = newsItems
+                .Select(x =>
+                {
+                    var newsModel = new NewsItemModel();
+                    PrepareNewsItemModel(newsModel, x, false);
+                    return newsModel;
+                })
+                .ToList();
+
+            return model;
+        }
+
         #endregion
     }
 }

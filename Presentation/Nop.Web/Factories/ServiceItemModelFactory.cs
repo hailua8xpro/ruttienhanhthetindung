@@ -5,9 +5,6 @@ using Nop.Core.Caching;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Services;
-using Nop.Core.Domain.Security;
-using Nop.Services.Common;
-using Nop.Services.Customers;
 using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Media;
@@ -20,7 +17,7 @@ using System.Collections.Generic;
 
 namespace Nop.Web.Factories
 {
-    public class ServiceItemModelFactory: IServiceItemModelFactory
+    public class ServiceItemModelFactory : IServiceItemModelFactory
     {
         #region Fields
 
@@ -113,7 +110,8 @@ namespace Nop.Web.Factories
                 return pictureModel;
             });
             var ServiceCategoryKey = string.Format(ModelCacheEventConsumer.SERVICEITEM_CATEGORY_KEY, model.Id, _workContext.WorkingLanguage.Id);
-            var ServiceCategory = _cacheManager.Get(ServiceCategoryKey, () => {
+            var ServiceCategory = _cacheManager.Get(ServiceCategoryKey, () =>
+            {
                 return _serviceCategoryService.GetFirstByServiceId(Service.Id);
             });
             if (ServiceCategory != null)
@@ -142,13 +140,30 @@ namespace Nop.Web.Factories
         /// Prepare the home page Service items model
         /// </summary>
         /// <returns>Home page Service items model</returns>
-        public virtual IList<ServiceItemModel> PrepareHomePageServiceItemsModel()
+        public IList<ServiceItemModel> PrepareHomePageServiceItemsModel()
         {
             var cacheKey = string.Format(ModelCacheEventConsumer.HOMEPAGE_SERVICESMODEL_KEY, _workContext.WorkingLanguage.Id, _storeContext.CurrentStore.Id);
             return _cacheManager.Get(cacheKey, () =>
             {
                 var Services = _serviceService.GetAllService(_storeContext.CurrentStore.Id, 0);
                 return Services
+                        .Select(x =>
+                        {
+                            var ServiceItemModel = new ServiceItemModel();
+                            PrepareServiceItemModel(ServiceItemModel, x);
+                            return ServiceItemModel;
+                        })
+                        .ToList();
+            });
+        }
+
+        public IList<ServiceItemModel> PrepareOtherServiceItemsModel(int serviceId)
+        {
+            var cacheKey = string.Format(ModelCacheEventConsumer.SERVICEITEM_OTHERSERVICE_KEY, _workContext.WorkingLanguage.Id, _storeContext.CurrentStore.Id, serviceId);
+            return _cacheManager.Get(cacheKey, () =>
+            {
+                var Services = _serviceService.GetAllService(_storeContext.CurrentStore.Id, 0);
+                return Services.Where(s => s.Id != serviceId)
                         .Select(x =>
                         {
                             var ServiceItemModel = new ServiceItemModel();
@@ -192,23 +207,27 @@ namespace Nop.Web.Factories
                _workContext.WorkingLanguage.Id,
                string.Join(",", _workContext.CurrentCustomer.GetCustomerRoleIds()),
                _storeContext.CurrentStore.Id);
-            return _cacheManager.Get(cacheKey, () => {
+            return _cacheManager.Get(cacheKey, () =>
+            {
                 var Services = _serviceService.GetAllService(_storeContext.CurrentStore.Id, 0);
                 return Services
                         .Select(service =>
                         {
-                            var ServiceItemModel = new ServiceSimpleModel {
-                                Id=service.Id,
-                                IncludeInTopMenu=service.IncludeInTopMenu,
-                                Name= _localizationService.GetLocalized(service, x => x.Name),
+                            var ServiceItemModel = new ServiceSimpleModel
+                            {
+                                Id = service.Id,
+                                IncludeInTopMenu = service.IncludeInTopMenu,
+                                Name = _localizationService.GetLocalized(service, x => x.Name),
                                 SeName = _urlRecordService.GetSeName(service),
                             };
-                            
+
                             return ServiceItemModel;
                         })
                         .ToList();
             });
         }
+
+
         #endregion
     }
 }

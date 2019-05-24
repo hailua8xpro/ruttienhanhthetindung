@@ -1,48 +1,34 @@
 ﻿@model IList<TestimonialModel>
-@inject IThemeContext themeContext
-
-@{
-    var themeName = themeContext.WorkingThemeName;
-    Html.AppendScriptParts(ResourceLocation.Footer, "~/lib/jquery-parallax/parallax.min.js");
-    var bgimage = string.Format("/Themes/{0}/Content/images/testimonial-bg.jpg", themeName);
-}
-<div class="parallax-window">
-    <div class="block-testimonial">
-        <div class="container">
-            <div class="main-heading">
-                <h2 class="heading-title">
-                    <span>@T("Homepage.Testimonials")</span>
-                </h2>
-            </div>
-            <div class="row">
-                @if (Model != null && Model.Any())
+<div class="box-testimonial">
+    <div class="container">
+        <div class="swiper-container testimonial-slider">
+            <div class="swiper-wrapper">
+                @foreach (var item in Model)
                 {
-                    foreach (var item in Model)
-                    {
-                        <div class="col-12 col-sm-6">
-                            <div class="testimonial">
-                                <img class="lazy" data-src="@item.ImageUrl" alt="@item.FullName" />
-                                <div class="name">
-                                    <strong>@item.FullName</strong>
-                                    @if (!string.IsNullOrEmpty(item.Description))
-                                    {
-                                        <text>/ </text> @item.Description
-                                    }
-
-                                </div>
-                                <div class="text">
-                                    @Html.Raw(item.FullDescription)
-                                </div>
-                            </div>
+                    <div class="swiper-slide">
+                        <div class="text-center">
+                            <img class="img-fluid rounded-circle" src="@item.ImageUrl" alt="@item.FullName" />
+                            <p class="lead">@item.FullName</p>
+                            <div class="text-primary">@Html.Raw(item.FullDescription) </div>
                         </div>
-                    }
+                    </div>
                 }
             </div>
+            <div class="swiper-pagination"></div>
         </div>
     </div>
 </div>
+
 <script asp-location="Footer">
     $(document).ready(function () {
-        $('.parallax-window').parallax({ imageSrc: '@bgimage' });
+        var testimonialslider = new Swiper('.testimonial-slider', {
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+                renderBullet: function (index, className) {
+                    return '<span class="' + className + '">' + (index + 1) + '</span>';
+                },
+            },
+        })
     });
 </script>

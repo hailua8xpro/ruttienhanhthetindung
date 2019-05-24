@@ -36,6 +36,7 @@ namespace Nop.Core.Domain.Media
         /// Picture size of category pictures
         /// </summary>
         public int CategoryThumbPictureSize { get; set; }
+        public int ServiceThumbPictureSize { get; set; }
         /// <summary>
         /// Picture size of news item pictures
         /// 

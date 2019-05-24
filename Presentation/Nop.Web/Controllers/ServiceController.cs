@@ -154,7 +154,7 @@ namespace Nop.Web.Controllers
 
             //display "edit" (manage) link
             if (hasAdminAccess)
-                DisplayEditLink(Url.Action("Edit", "Service", new { id = Service.Id, area = AreaNames.Admin }));
+                DisplayEditLink(Url.Action("ServiceEdit", "Service", new { id = Service.Id, area = AreaNames.Admin }));
 
             return View(model);
         }

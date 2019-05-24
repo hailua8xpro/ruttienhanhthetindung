@@ -1,0 +1,18 @@
+﻿@model IList<ServiceItemModel>
+@if (Model!=null && Model.Any())
+{
+<div class="block-other-service">
+    <div class="block-title"><strong>@T("otherservice")</strong></div>
+    <div class="block-content">
+        <ul class="nav-news-categories">
+            @foreach (var item in Model)
+            {
+                <li>
+                        <a href="@Url.RouteUrl("Service", new { SeName = item.SeName })" title="@item.Name">@item.Name</a>
+                </li>
+            }
+        </ul>
+            
+    </div>
+</div>
+}
