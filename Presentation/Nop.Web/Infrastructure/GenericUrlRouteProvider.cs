@@ -41,6 +41,8 @@ namespace Nop.Web.Infrastructure
             
             routeBuilder.MapLocalizedRoute("NewsItem", "{SeName}", 
                 new { controller = "News", action = "NewsItem" });
+            routeBuilder.MapLocalizedRoute("NewsCategory", "{SeName}",
+                new { controller = "News", action = "Category" });
             routeBuilder.MapLocalizedRoute("ServiceCategory", "{SeName}",
                 new { controller = "Service", action = "Category" });
             routeBuilder.MapLocalizedRoute("Service", "{SeName}",
